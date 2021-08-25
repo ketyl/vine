@@ -1,0 +1,29 @@
+{
+    "name": "ketyl/vine",
+    "description": "Simple PHP framework.",
+    "keywords": [
+        "framework"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zak Nesler",
+            "email": "zak@nesler.dev",
+            "homepage": "https://nesler.dev"
+        }
+    ],
+    "require": {
+        "php": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ketyl\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.3"
+    }
+}
