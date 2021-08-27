@@ -1,15 +1,19 @@
 <?php
 
 use Ketyl\Vine\App;
+use App\Http\Controllers\HomeController;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new App();
+$router = $app->router();
 
-$app->router()->get('/', function () {
+$router->get('/', function () {
     return 'Hello, world!';
 });
 
-$app->router()->get('/test', function () {
+$router->get('/test', function () {
     return 'Test!';
 });
+
+$router->get('/class', [HomeController::class, 'index']);

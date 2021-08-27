@@ -29,10 +29,10 @@ class Route
 
     public function handle()
     {
-        if ($this->callable) {
-            return call_user_func($this->callable);
+        if (!$this->callable) {
+            throw new \Exception;
         }
 
-        return null;
+        return call_user_func($this->callable);
     }
 }
