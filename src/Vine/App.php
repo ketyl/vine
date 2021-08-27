@@ -15,7 +15,7 @@ class App
 
     public function run()
     {
-        $route = $this->router->matchRoute($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+        $route = $this->router->matchRoute($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'])['path']);
 
         return $this->render($route->handle());
     }
