@@ -15,12 +15,18 @@ class App
 
     public function run()
     {
-        $route = $this->router->matchRoute($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'])['path']);
+        return $this->handle();
+    }
+
+    private function handle()
+    {
+        $route = $this->router->matchRoute($_SERVER['REQUEST_METHOD'], rtrim(parse_url($_SERVER['REQUEST_URI'])['path'], '/'));
 
         return $this->render($route->handle());
     }
 
-    public function render(mixed $response)
+
+    private function render(mixed $response)
     {
         if (!$response) {
             return;

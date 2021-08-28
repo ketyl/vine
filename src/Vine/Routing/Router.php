@@ -14,6 +14,8 @@ class Router
 
     public function matchRoute(string $method, string $uri)
     {
+        $uri = $uri ? $uri : '/';
+
         foreach ($this->routes as $route) {
             if ($route->getMethod() != $method) {
                 continue;

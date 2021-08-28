@@ -2,8 +2,6 @@
 
 namespace Ketyl\Vine\Routing;
 
-use Closure;
-
 class Route
 {
     protected string $uri;
