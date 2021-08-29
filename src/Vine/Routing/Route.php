@@ -4,15 +4,15 @@ namespace Ketyl\Vine\Routing;
 
 class Route
 {
-    protected string $uri;
+    protected string $pattern;
     protected string $method;
-    protected $callable;
+    protected mixed $callable;
     protected array $parameters;
 
-    public function __construct(string $method, string $uri, $callable, array $parameters)
+    public function __construct(string $method, string $pattern, mixed $callable, array $parameters)
     {
         $this->method = $method;
-        $this->uri = $uri;
+        $this->pattern = $pattern;
         $this->callable = $callable;
         $this->parameters = $parameters;
     }
@@ -27,9 +27,9 @@ class Route
         return $this->method == $method;
     }
 
-    public function getURI(): string
+    public function getPattern(): string
     {
-        return $this->uri;
+        return $this->pattern;
     }
 
     public function getParameters(): array
@@ -42,7 +42,7 @@ class Route
         return $this->parameters = $values;
     }
 
-    public function handle()
+    public function handle(): mixed
     {
         if (!$this->callable) {
             throw new \Exception;

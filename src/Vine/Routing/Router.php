@@ -7,21 +7,22 @@ use Ketyl\Vine\Exceptions\NotFoundException;
 
 class Router
 {
-    /**
-     * @var Route[]
-     */
+    /** @var Route[] */
     protected array $routes = [];
 
-    public function matchRoute(string $method, string $uri)
+    public function matchRoute(string $method, string $pattern): Route
     {
-        $uri = $uri ? $uri : '/';
+        $pattern = $pattern ? $pattern : '/';
 
         foreach ($this->routes as $route) {
             if (!$route->acceptsMethod($method)) continue;
 
-            $pattern = '/^' . preg_replace('/\{[^\/\{\}]+\}/', '([^\/\{\}]+)', str_replace('/', '\/', $route->getURI())) . '$/';
             $matches = [];
-            $match = preg_match($pattern, $uri, $matches);
+            $match = preg_match(
+                '/^' . preg_replace('/\{[^\/\{\}]+\}/', '([^\/\{\}]+)', str_replace('/', '\/', $route->getPattern())) . '$/',
+                $pattern,
+                $matches
+            );
 
             if (!$match) continue;
 
@@ -37,14 +38,14 @@ class Router
         throw new NotFoundException;
     }
 
-    public function get(string $uri, mixed $callable)
+    public function get(string $pattern, mixed $callable): Router
     {
         $parameters = [];
-        preg_match_all('/(?!\{)[^\/\{\}]+(?=\})/', $uri, $parameters);
+        preg_match_all('/(?!\{)[^\/\{\}]+(?=\})/', $pattern, $parameters);
 
         $this->routes[] = new Route(
             method: 'GET',
-            uri: $uri,
+            pattern: $pattern,
             callable: $this->mutateCallable($callable),
             parameters: $parameters[0],
         );
@@ -52,7 +53,7 @@ class Router
         return $this;
     }
 
-    public function mutateCallable(mixed $callable)
+    public function mutateCallable(mixed $callable): mixed
     {
         if (is_callable($callable)) {
             return $callable;
@@ -65,7 +66,7 @@ class Router
         return null;
     }
 
-    private function loadClass(string $class, string $method)
+    private function loadClass(string $class, string $method): mixed
     {
         if (!class_exists($class)) {
             throw new \Exception;

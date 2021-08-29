@@ -13,12 +13,12 @@ class App
         $this->router = new Router;
     }
 
-    public function run()
+    public function run(): mixed
     {
         return $this->handle();
     }
 
-    private function handle()
+    private function handle(): mixed
     {
         $route = $this->router->matchRoute($_SERVER['REQUEST_METHOD'], rtrim(parse_url($_SERVER['REQUEST_URI'])['path'], '/'));
 
@@ -26,18 +26,19 @@ class App
     }
 
 
-    private function render(mixed $response)
+    private function render(mixed $response): mixed
     {
         if (!$response) {
-            return;
+            return null;
         }
 
         return match (gettype($response)) {
             'string' => print($response),
+            'array' => dump($response),
         };
     }
 
-    public function router()
+    public function router(): Router
     {
         return $this->router;
     }

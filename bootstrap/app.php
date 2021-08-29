@@ -23,5 +23,5 @@ $router->get('/param/{foo}', function ($foo) {
 });
 
 $router->get('/param/{foo}/{bar}', function ($foo, $bar) {
-    return $bar;
+    return [$foo, $bar];
 });
