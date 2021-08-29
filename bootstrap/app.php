@@ -17,3 +17,11 @@ $router->get('/test', function () {
 });
 
 $router->get('/class', [HomeController::class, 'index']);
+
+$router->get('/param/{foo}', function ($foo) {
+    return $foo;
+});
+
+$router->get('/param/{foo}/{bar}', function ($foo, $bar) {
+    return $bar;
+});
