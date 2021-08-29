@@ -25,7 +25,6 @@ class App
         return $this->render($route->handle());
     }
 
-
     private function render(mixed $response): mixed
     {
         if (!$response) {

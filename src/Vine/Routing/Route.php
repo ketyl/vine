@@ -17,6 +17,19 @@ class Route
         $this->parameters = $parameters;
     }
 
+    public static function create(string $method, string $pattern, mixed $callable): Route
+    {
+        $parameters = [];
+        preg_match_all('/(?!\{)[^\/\{\}]+(?=\})/', $pattern, $parameters);
+
+        return new Route(
+            method: $method,
+            pattern: $pattern,
+            callable: $callable,
+            parameters: $parameters[0],
+        );
+    }
+
     public function getMethod(): string
     {
         return $this->method;

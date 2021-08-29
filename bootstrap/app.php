@@ -1,7 +1,14 @@
 <?php
 
 use Ketyl\Vine\App;
-use App\Http\Controllers\HomeController;
+
+class HomeController
+{
+    public function index()
+    {
+        return 'Hello, class!';
+    }
+}
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

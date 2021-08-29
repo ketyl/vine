@@ -39,14 +39,10 @@ class Router
 
     public function get(string $pattern, mixed $callable): Router
     {
-        $parameters = [];
-        preg_match_all('/(?!\{)[^\/\{\}]+(?=\})/', $pattern, $parameters);
-
-        $this->routes[] = new Route(
-            method: 'GET',
+        $this->routes[] = Route::create(
+            'GET',
             pattern: $pattern,
             callable: $this->mutateCallable($callable),
-            parameters: $parameters[0],
         );
 
         return $this;
