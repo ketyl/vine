@@ -7,14 +7,13 @@ use Ketyl\Vine\Exceptions\NotFoundException;
 
 class Router
 {
-    /** @var Route[] */
-    protected array $routes = [];
+    private array $routes = [];
 
     public function matchRoute(string $method, string $pattern): Route
     {
-        $pattern = $pattern ? $pattern : '/';
+        $pattern = $pattern ? rtrim($pattern, '/') : '/';
 
-        foreach ($this->routes as $route) {
+        foreach ($this->getRoutes() as $route) {
             if (!$route->acceptsMethod($method)) continue;
 
             $matches = [];
@@ -77,5 +76,13 @@ class Router
         }
 
         return [new $class, $method];
+    }
+
+    /**
+     * @return Route[]
+     */
+    public function getRoutes(): array
+    {
+        return $this->routes;
     }
 }

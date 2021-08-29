@@ -15,16 +15,28 @@
     "require": {
         "php": "^8.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^5.3"
+    },
     "autoload": {
         "psr-4": {
             "Ketyl\\": "src/",
             "App\\": "app/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Ketyl\\Vine\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "phpunit"
+    },
     "config": {
         "sort-packages": true
-    },
-    "require-dev": {
-        "symfony/var-dumper": "^5.3"
     }
 }
