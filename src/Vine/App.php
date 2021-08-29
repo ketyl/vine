@@ -15,25 +15,27 @@ class App
 
     public function run(): mixed
     {
-        return $this->handle();
+        $request = Request::createFromServer($_SERVER);
+
+        return $this->handle($request);
     }
 
-    private function handle(): mixed
+    private function handle(Request $request): mixed
     {
-        $route = $this->router->matchRoute($_SERVER['REQUEST_METHOD'], rtrim(parse_url($_SERVER['REQUEST_URI'])['path'], '/'));
+        $route = $this->router->match($request);
 
-        return $this->render($route->handle());
+        return $this->createResponse($route->handle($request));
     }
 
-    private function render(mixed $response): mixed
+    private function createResponse(mixed $data): mixed
     {
-        if (!$response) {
+        if (!$data) {
             return null;
         }
 
-        return match (gettype($response)) {
-            'string' => print($response),
-            'array' => dump($response),
+        return match (gettype($data)) {
+            'string' => print($data),
+            'array' => print(json_encode($data)),
         };
     }
 

@@ -2,24 +2,23 @@
 
 namespace Ketyl\Vine\Routing;
 
+use Ketyl\Vine\Request;
 use Ketyl\Vine\Routing\Route;
 use Ketyl\Vine\Exceptions\NotFoundException;
 
 class Router
 {
-    private array $routes = [];
+    protected array $routes = [];
 
-    public function matchRoute(string $method, string $pattern): Route
+    public function match(Request $request): Route
     {
-        $pattern = $pattern ? rtrim($pattern, '/') : '/';
-
         foreach ($this->getRoutes() as $route) {
-            if (!$route->acceptsMethod($method)) continue;
+            if (!$route->acceptsMethod($request->getMethod())) continue;
 
             $matches = [];
             $match = preg_match(
                 '/^' . preg_replace('/\{[^\/\{\}]+\}/', '([^\/\{\}]+)', str_replace('/', '\/', $route->getPattern())) . '$/',
-                $pattern,
+                $request->getURI(),
                 $matches
             );
 

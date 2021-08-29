@@ -2,6 +2,8 @@
 
 namespace Ketyl\Vine\Routing;
 
+use Ketyl\Vine\Request;
+
 class Route
 {
     protected string $pattern;
@@ -55,7 +57,7 @@ class Route
         return $this->parameters = $values;
     }
 
-    public function handle(): mixed
+    public function handle(Request $request): mixed
     {
         if (!$this->callable) {
             throw new \Exception;

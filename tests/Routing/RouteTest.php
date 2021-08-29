@@ -16,7 +16,6 @@ class RouteTest extends TestCase
         $this->assertEquals('GET', $route->getMethod());
         $this->assertEquals('/route', $route->getPattern());
         $this->assertEquals([], $route->getParameters());
-        $this->assertEquals('Hello, world!', $route->handle());
     }
 
     /** @test */
