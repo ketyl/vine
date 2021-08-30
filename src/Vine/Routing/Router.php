@@ -15,7 +15,6 @@ class Router
         foreach ($this->getRoutes() as $route) {
             if (!$route->acceptsMethod($request->getMethod())) continue;
 
-            $matches = [];
             $match = preg_match(
                 '/^' . preg_replace('/\{[^\/\{\}]+\}/', '([^\/\{\}]+)', str_replace('/', '\/', $route->getPattern())) . '$/',
                 $request->getURI(),
@@ -36,15 +35,13 @@ class Router
         throw new NotFoundException;
     }
 
-    public function get(string $pattern, mixed $callable): Router
+    public function get(string $pattern, mixed $callable): Route
     {
-        $this->routes[] = Route::create(
-            'GET',
+        return $this->addRoute(Route::create(
+            method: 'GET',
             pattern: $pattern,
             callable: $this->mutateCallable($callable),
-        );
-
-        return $this;
+        ));
     }
 
     public function mutateCallable(mixed $callable): mixed
@@ -60,6 +57,21 @@ class Router
         return null;
     }
 
+    /**
+     * @return Route[]
+     */
+    public function getRoutes(): array
+    {
+        return $this->routes;
+    }
+
+    private function addRoute(Route $route): Route
+    {
+        $this->routes[] = $route;
+
+        return $route;
+    }
+
     private function loadClass(string $class, string $method): mixed
     {
         if (!class_exists($class)) {
@@ -71,13 +83,5 @@ class Router
         }
 
         return [new $class, $method];
-    }
-
-    /**
-     * @return Route[]
-     */
-    public function getRoutes(): array
-    {
-        return $this->routes;
     }
 }

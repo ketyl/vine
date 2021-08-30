@@ -11,19 +11,19 @@ class Response
         $this->data = $data;
     }
 
-    public function transform(): mixed
+    public function transform(): string
     {
         if (!$this->data) {
             return null;
         }
 
         return match (gettype($this->data)) {
-            'string' => print($this->data),
-            'array' => print(json_encode($this->data)),
+            'string' => $this->data,
+            'array' => json_encode($this->data),
         };
     }
 
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }

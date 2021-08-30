@@ -22,7 +22,6 @@ class Route
 
     public static function create(string $method, string $pattern, mixed $callable): Route
     {
-        $parameters = [];
         preg_match_all('/(?!\{)[^\/\{\}]+(?=\})/', $pattern, $parameters);
 
         return new Route(

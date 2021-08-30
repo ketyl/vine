@@ -13,12 +13,11 @@ class App
         $this->router = new Router;
     }
 
-    public function run(): mixed
+    public function run(): void
     {
         $request = Request::createFromServer($_SERVER);
-        $response = $this->handle($request);
 
-        return $response->transform();
+        print($this->handle($request)->transform());
     }
 
     private function handle(Request $request): Response
