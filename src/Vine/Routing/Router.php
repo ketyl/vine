@@ -18,7 +18,7 @@ class Router
             $match = preg_match(
                 '/^' . preg_replace('/\{[^\/\{\}]+\}/', '([^\/\{\}]+)', str_replace('/', '\/', $route->getPattern())) . '$/',
                 $request->getURI(),
-                $matches
+                $matches,
             );
 
             if (!$match) continue;
@@ -38,7 +38,7 @@ class Router
     public function get(string $pattern, mixed $callable): Route
     {
         return $this->addRoute(Route::create(
-            method: 'GET',
+            methods: ['GET', 'HEAD'],
             pattern: $pattern,
             callable: $this->mutateCallable($callable),
         ));

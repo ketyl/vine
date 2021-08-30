@@ -2,7 +2,6 @@
 
 namespace Ketyl\Vine\Tests;
 
-use Ketyl\Vine\App;
 use Ketyl\Vine\Routing\Route;
 use Ketyl\Vine\Tests\TestCase;
 
@@ -11,9 +10,9 @@ class RouteTest extends TestCase
     /** @test */
     function canCreateRoute()
     {
-        $route = new Route('GET', '/route', fn () => 'Hello, world!', []);
+        $route = Route::create('GET', '/route', fn () => 'Hello, world!');
 
-        $this->assertEquals('GET', $route->getMethod());
+        $this->assertEquals(['GET'], $route->getMethods());
         $this->assertEquals('/route', $route->getPattern());
         $this->assertEquals([], $route->getParameters());
     }
@@ -21,8 +20,24 @@ class RouteTest extends TestCase
     /** @test */
     function routeCanDetermineIfAcceptsMethod()
     {
-        $route = new Route('GET', '/route', fn () => 'Hello, world!', []);
+        $route = Route::create('GET', '/route', fn () => 'Hello, world!');
 
         $this->assertTrue($route->acceptsMethod('GET'));
+    }
+
+    /** @test */
+    function canCreateRouteWithAParameter()
+    {
+        $route = Route::create('GET', '/route/{foo}', fn () => 'Hello, world!');
+
+        $this->assertEquals(['foo'], $route->getParameters());
+    }
+
+    /** @test */
+    function canCreateRouteWithMultipleParameters()
+    {
+        $route = Route::create('GET', '/route/{foo}/{bar}', fn () => 'Hello, world!');
+
+        $this->assertEquals(['foo', 'bar'], $route->getParameters());
     }
 }

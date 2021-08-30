@@ -8,38 +8,38 @@ use Ketyl\Vine\Response;
 class Route
 {
     protected string $pattern;
-    protected string $method;
+    protected array $methods;
     protected mixed $callable;
     protected array $parameters;
 
-    public function __construct(string $method, string $pattern, mixed $callable, array $parameters)
+    public function __construct(array $methods, string $pattern, mixed $callable, array $parameters)
     {
-        $this->method = $method;
+        $this->methods = $methods;
         $this->pattern = $pattern;
         $this->callable = $callable;
         $this->parameters = $parameters;
     }
 
-    public static function create(string $method, string $pattern, mixed $callable): Route
+    public static function create(array|string $methods, string $pattern, mixed $callable): Route
     {
         preg_match_all('/(?!\{)[^\/\{\}]+(?=\})/', $pattern, $parameters);
 
         return new Route(
-            method: $method,
+            methods: is_array($methods) ? $methods : [$methods],
             pattern: $pattern,
             callable: $callable,
             parameters: $parameters[0],
         );
     }
 
-    public function getMethod(): string
+    public function getMethods(): array
     {
-        return $this->method;
+        return $this->methods;
     }
 
-    public function acceptsMethod(string $method): bool
+    public function acceptsMethod(string|array $method): bool
     {
-        return $this->method == $method;
+        return in_array($method, $this->methods);
     }
 
     public function getPattern(): string

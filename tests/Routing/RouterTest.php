@@ -15,7 +15,7 @@ class RouterTest extends TestCase
         $router->get('/route', fn () => 'Hello, world!');
 
         $this->assertCount(1, $router->getRoutes());
-        $this->assertEquals('GET', $router->getRoutes()[0]->getMethod());
+        $this->assertTrue($router->getRoutes()[0]->acceptsMethod('GET'));
         $this->assertEquals('/route', $router->getRoutes()[0]->getPattern());
         $this->assertEquals([], $router->getRoutes()[0]->getParameters());
     }
@@ -23,9 +23,9 @@ class RouterTest extends TestCase
     /** @test */
     function canMatchRoute()
     {
-        $request = new Request('GET', '/route');
         $router = new Router;
         $router->get('/route', fn () => 'Hello, world!');
+        $request = new Request('GET', '/route');
 
         $route = $router->match($request);
         $this->assertNotNull($route);
@@ -35,33 +35,36 @@ class RouterTest extends TestCase
     /** @test */
     function canMatchRouteWithParameters()
     {
-        $request = new Request('GET', '/route/hello');
         $router = new Router;
         $router->get('/route/{foo}', fn ($foo) => $foo);
+        $request = new Request('GET', '/route/hello');
 
         $route = $router->match($request);
         $this->assertNotNull($route);
+        $this->assertEquals('hello', $route->getParameters()['foo']);
         $this->assertEquals('hello', $route->handle($request)->getData());
     }
 
     /** @test */
     function canMatchRouteWithMultipleParameters()
     {
-        $request = new Request('GET', '/route/hello/bar/world');
         $router = new Router;
-        $router->get('/route/{foo}/bar/{baz}', fn ($foo, $bar) => $foo . ' ' . $bar);
+        $router->get('/route/{foo}/bar/{baz}', fn ($foo, $baz) => $foo . ' ' . $baz);
+        $request = new Request('GET', '/route/hello/bar/world');
 
         $route = $router->match($request);
         $this->assertNotNull($route);
+        $this->assertEquals('hello', $route->getParameters()['foo']);
+        $this->assertEquals('world', $route->getParameters()['baz']);
         $this->assertEquals('hello world', $route->handle($request)->getData());
     }
 
     /** @test */
     function canMatchRouteWithRegex()
     {
-        $request = new Request('GET', '/route/123');
         $router = new Router;
         $router->get('/route/[0-9]+', fn () => 'Hello, world!');
+        $request = new Request('GET', '/route/123');
 
         $route = $router->match($request);
         $this->assertNotNull($route);
