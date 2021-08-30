@@ -16,27 +16,14 @@ class App
     public function run(): mixed
     {
         $request = Request::createFromServer($_SERVER);
+        $response = $this->handle($request);
 
-        return $this->handle($request);
+        return $response->transform();
     }
 
-    private function handle(Request $request): mixed
+    private function handle(Request $request): Response
     {
-        $route = $this->router->match($request);
-
-        return $this->createResponse($route->handle($request));
-    }
-
-    private function createResponse(mixed $data): mixed
-    {
-        if (!$data) {
-            return null;
-        }
-
-        return match (gettype($data)) {
-            'string' => print($data),
-            'array' => print(json_encode($data)),
-        };
+        return $this->router->match($request)->handle($request);
     }
 
     public function router(): Router

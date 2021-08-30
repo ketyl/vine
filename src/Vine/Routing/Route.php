@@ -3,6 +3,7 @@
 namespace Ketyl\Vine\Routing;
 
 use Ketyl\Vine\Request;
+use Ketyl\Vine\Response;
 
 class Route
 {
@@ -57,12 +58,14 @@ class Route
         return $this->parameters = $values;
     }
 
-    public function handle(Request $request): mixed
+    public function handle(Request $request): Response
     {
         if (!$this->callable) {
             throw new \Exception;
         }
 
-        return call_user_func($this->callable, ...array_values($this->getParameters()));
+        return new Response(
+            call_user_func($this->callable, ...array_values($this->getParameters()))
+        );
     }
 }

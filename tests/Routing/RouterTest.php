@@ -29,7 +29,7 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('Hello, world!', $route->handle($request));
+        $this->assertEquals('Hello, world!', $route->handle($request)->getData());
     }
 
     /** @test */
@@ -41,7 +41,7 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('hello', $route->handle($request));
+        $this->assertEquals('hello', $route->handle($request)->getData());
     }
 
     /** @test */
@@ -53,7 +53,7 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('hello world', $route->handle($request));
+        $this->assertEquals('hello world', $route->handle($request)->getData());
     }
 
     /** @test */
@@ -65,6 +65,6 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('Hello, world!', $route->handle($request));
+        $this->assertEquals('Hello, world!', $route->handle($request)->getData());
     }
 }
