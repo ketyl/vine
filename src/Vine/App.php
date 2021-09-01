@@ -6,11 +6,10 @@ use Ketyl\Vine\Routing\Router;
 
 class App
 {
-    protected $router;
-
-    public function __construct()
-    {
-        $this->router = new Router;
+    public function __construct(
+        protected ?Router $router = null
+    ) {
+        $this->router = $router ?? new Router;
     }
 
     public function run(): void

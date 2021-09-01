@@ -8,7 +8,11 @@ use Ketyl\Vine\Exceptions\NotFoundException;
 
 class Router
 {
-    protected array $routes = [];
+    public function __construct(
+        protected ?array $routes = null
+    ) {
+        $this->routes = $routes;
+    }
 
     public function match(Request $request): Route
     {

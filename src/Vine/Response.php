@@ -4,10 +4,9 @@ namespace Ketyl\Vine;
 
 class Response
 {
-    protected $data;
-
-    public function __construct(mixed $data)
-    {
+    public function __construct(
+        protected mixed $data
+    ) {
         $this->data = $data;
     }
 

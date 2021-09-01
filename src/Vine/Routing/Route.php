@@ -7,13 +7,12 @@ use Ketyl\Vine\Response;
 
 class Route
 {
-    protected string $pattern;
-    protected array $methods;
-    protected mixed $callable;
-    protected array $parameters;
-
-    public function __construct(array $methods, string $pattern, mixed $callable, array $parameters)
-    {
+    public function __construct(
+        protected array $methods,
+        protected string $pattern,
+        protected mixed $callable,
+        protected array $parameters
+    ) {
         $this->methods = $methods;
         $this->pattern = $pattern;
         $this->callable = $callable;

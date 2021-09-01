@@ -4,12 +4,11 @@ namespace Ketyl\Vine;
 
 class Request
 {
-    protected string $method;
-    protected string $uri;
-    protected array $server;
-
-    public function __construct(string $method, string $uri, array $server = null)
-    {
+    public function __construct(
+        protected string $method,
+        protected string $uri,
+        protected ?array $server = null
+    ) {
         $this->method = $method;
         $this->uri = $uri;
         $this->server = $server ?? $_SERVER;
