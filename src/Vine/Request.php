@@ -17,7 +17,7 @@ class Request
 
     public static function createFromServer(array $server)
     {
-        $uri = rtrim(parse_url($_SERVER['REQUEST_URI'])['path'], '/');
+        $uri = rtrim(parse_url($server['REQUEST_URI'])['path'], '/');
 
         return new Request(
             $server['REQUEST_METHOD'],

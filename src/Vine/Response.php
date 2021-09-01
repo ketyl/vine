@@ -11,7 +11,7 @@ class Response
         $this->data = $data;
     }
 
-    public function transform(): string
+    public function transform(): mixed
     {
         if (!$this->data) {
             return null;
