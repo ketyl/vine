@@ -15,20 +15,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $app = new App();
 $router = $app->router();
 
-$router->get('/', function () {
-    return 'Hello, world!';
-});
+$router->get('/', fn () => 'Hello, world!');
+$router->get('/test', fn () => 'Test!');
 
-$router->get('/test', function () {
-    return 'Test!';
-});
+$router->get('/view', fn () => \Ketyl\Vine\View::createFromFile(__DIR__ . '/../views/index.html'));
 
 $router->get('/class', [HomeController::class, 'index']);
 
-$router->get('/param/{foo}', function ($foo) {
-    return $foo;
-});
-
-$router->get('/param/{foo}/{bar}', function ($foo, $bar) {
-    return [$foo, $bar];
-});
+$router->get('/param/{foo}', fn ($foo) => $foo);
+$router->get('/param/{foo}/{bar}', fn ($foo, $bar) => [$foo, $bar]);
