@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f64bf4522d4e590f7c9cdf58e6f8382a",
+    "content-hash": "4ff1bd90db71596b1699b9d3e81f89b8",
     "packages": [],
     "packages-dev": [
         {
@@ -846,16 +846,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.8",
+            "version": "9.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "191768ccd5c85513b4068bdbe99bb6390c7d54fb"
+                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/191768ccd5c85513b4068bdbe99bb6390c7d54fb",
-                "reference": "191768ccd5c85513b4068bdbe99bb6390c7d54fb",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
+                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
                 "shasum": ""
             },
             "require": {
@@ -933,7 +933,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.8"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.9"
             },
             "funding": [
                 {
@@ -945,7 +945,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-31T15:17:34+00:00"
+            "time": "2021-08-31T06:47:40+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -2155,16 +2155,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.3.6",
+            "version": "v5.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "3dd8ddd1e260e58ecc61bb78da3b6584b3bfcba0"
+                "reference": "3ad5af4aed07d0a0201bbcfc42658fe6c5b2fb8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/3dd8ddd1e260e58ecc61bb78da3b6584b3bfcba0",
-                "reference": "3dd8ddd1e260e58ecc61bb78da3b6584b3bfcba0",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/3ad5af4aed07d0a0201bbcfc42658fe6c5b2fb8f",
+                "reference": "3ad5af4aed07d0a0201bbcfc42658fe6c5b2fb8f",
                 "shasum": ""
             },
             "require": {
@@ -2223,7 +2223,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.3.6"
+                "source": "https://github.com/symfony/var-dumper/tree/v5.3.7"
             },
             "funding": [
                 {
@@ -2239,7 +2239,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-27T01:56:02+00:00"
+            "time": "2021-08-04T23:19:25+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -2356,7 +2356,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.0"
+        "php": "^8.0|^8.1"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"
