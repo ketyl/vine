@@ -30,15 +30,13 @@ Once installed, you may create an instance of `Ketyl\Vine\App`, add your routes,
 $app = new App();
 $router = $app->router();
 
-$router->get('/', function () {
-    return 'Hello, world!';
-});
+$router->get('/', fn () => 'Hello, world!');
 
 $router->get('/posts', [PostController::class, 'index']);
 
-$router->get('/param/{foo}', function ($foo) {
-    return $foo;
-});
+$router->get('/param/{foo}', fn ($foo) => $foo);
+
+$router->get('/view', fn () => \Ketyl\Vine\View::createFromFile(__DIR__ . '/../views/index.html'));
 
 $app->run();
 ```
