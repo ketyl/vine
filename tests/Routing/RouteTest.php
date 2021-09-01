@@ -8,7 +8,7 @@ use Ketyl\Vine\Tests\TestCase;
 class RouteTest extends TestCase
 {
     /** @test */
-    function canCreateRoute()
+    function can_create_route()
     {
         $route = Route::create('GET', '/route', fn () => 'Hello, world!');
 
@@ -18,7 +18,7 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    function routeCanDetermineIfAcceptsMethod()
+    function route_can_determine_if_accepts_method()
     {
         $route = Route::create('GET', '/route', fn () => 'Hello, world!');
 
@@ -26,7 +26,7 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    function canCreateRouteWithAParameter()
+    function can_create_route_with_a_parameter()
     {
         $route = Route::create('GET', '/route/{foo}', fn () => 'Hello, world!');
 
@@ -34,7 +34,7 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    function canCreateRouteWithMultipleParameters()
+    function can_create_route_with_multiple_parameters()
     {
         $route = Route::create('GET', '/route/{foo}/{bar}', fn () => 'Hello, world!');
 

@@ -9,19 +9,20 @@ use Ketyl\Vine\Tests\TestCase;
 class RouterTest extends TestCase
 {
     /** @test */
-    function canCreateGetRoute()
+    function can_create_get_route()
     {
         $router = new Router;
         $router->get('/route', fn () => 'Hello, world!');
 
         $this->assertCount(1, $router->getRoutes());
         $this->assertTrue($router->getRoutes()[0]->acceptsMethod('GET'));
+        $this->assertTrue($router->getRoutes()[0]->acceptsMethod('HEAD'));
         $this->assertEquals('/route', $router->getRoutes()[0]->getPattern());
         $this->assertEquals([], $router->getRoutes()[0]->getParameters());
     }
 
     /** @test */
-    function canMatchRoute()
+    function can_match_route()
     {
         $router = new Router;
         $router->get('/route', fn () => 'Hello, world!');
@@ -33,7 +34,7 @@ class RouterTest extends TestCase
     }
 
     /** @test */
-    function canMatchRouteWithParameters()
+    function can_match_route_with_parameters()
     {
         $router = new Router;
         $router->get('/route/{foo}', fn ($foo) => $foo);
@@ -46,7 +47,7 @@ class RouterTest extends TestCase
     }
 
     /** @test */
-    function canMatchRouteWithMultipleParameters()
+    function can_match_route_with_multiple_parameters()
     {
         $router = new Router;
         $router->get('/route/{foo}/bar/{baz}', fn ($foo, $baz) => $foo . ' ' . $baz);
@@ -60,7 +61,7 @@ class RouterTest extends TestCase
     }
 
     /** @test */
-    function canMatchRouteWithRegex()
+    function can_match_route_with_regex()
     {
         $router = new Router;
         $router->get('/route/[0-9]+', fn () => 'Hello, world!');
