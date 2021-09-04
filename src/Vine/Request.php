@@ -2,6 +2,8 @@
 
 namespace Ketyl\Vine;
 
+use Ketyl\Vine\Routing\Route;
+
 class Request
 {
     public function __construct(
@@ -23,6 +25,25 @@ class Request
             $uri ? $uri : '/',
             $server,
         );
+    }
+
+    public function matchesRoute(Route $route, array &$parameters = []): bool
+    {
+        if (!$route->acceptsMethod($this->getMethod())) return false;
+
+        $match = preg_match(
+            '/^' . preg_replace('/\{[^\/\{\}]+\}/', '([^\/\{\}]+)', str_replace('/', '\/', $route->getPattern())) . '$/',
+            $this->getURI(),
+            $matches,
+        );
+
+        if (!$match) return false;
+
+        array_shift($matches);
+
+        $parameters = array_combine($route->getParameters(), $matches);
+
+        return true;
     }
 
     public function getMethod()

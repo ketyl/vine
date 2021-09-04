@@ -17,21 +17,13 @@ class Router
     public function match(Request $request): Route
     {
         foreach ($this->getRoutes() as $route) {
-            if (!$route->acceptsMethod($request->getMethod())) continue;
+            $parameters = [];
 
-            $match = preg_match(
-                '/^' . preg_replace('/\{[^\/\{\}]+\}/', '([^\/\{\}]+)', str_replace('/', '\/', $route->getPattern())) . '$/',
-                $request->getURI(),
-                $matches,
-            );
+            if (!$request->matchesRoute($route, $parameters)) {
+                continue;
+            }
 
-            if (!$match) continue;
-
-            array_shift($matches);
-
-            $route->setParameters(
-                array_combine($route->getParameters(), $matches)
-            );
+            $route->setParameters($parameters);
 
             return $route;
         }

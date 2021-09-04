@@ -11,7 +11,7 @@ class Route
         protected array $methods,
         protected string $pattern,
         protected mixed $callable,
-        protected array $parameters
+        protected array $parameters,
     ) {
         $this->methods = $methods;
         $this->pattern = $pattern;
