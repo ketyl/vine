@@ -40,4 +40,12 @@ class RouteTest extends TestCase
 
         $this->assertEquals(['foo', 'bar'], $route->getParameters());
     }
+
+    /** @test */
+    function can_create_route_parameter_with_regex()
+    {
+        $route = Route::create('GET', '/route/{foo:\d+}', fn () => 'Hello, world!');
+
+        $this->assertEquals(['foo:\d+'], $route->getParameters());
+    }
 }

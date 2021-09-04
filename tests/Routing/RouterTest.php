@@ -5,6 +5,7 @@ namespace Ketyl\Vine\Tests;
 use Ketyl\Vine\Request;
 use Ketyl\Vine\Routing\Router;
 use Ketyl\Vine\Tests\TestCase;
+use Ketyl\Vine\Exceptions\NotFoundException;
 
 class RouterTest extends TestCase
 {
@@ -70,5 +71,29 @@ class RouterTest extends TestCase
         $route = $router->match($request);
         $this->assertNotNull($route);
         $this->assertEquals('Hello, world!', $route->handle($request)->getData());
+    }
+
+    /** @test */
+    function can_match_route_parameter_with_regex()
+    {
+        $router = new Router;
+        $router->get('/route/{foo:\d+}', fn () => 'Hello, world!');
+        $request = new Request('GET', '/route/123');
+
+        $route = $router->match($request);
+        $this->assertNotNull($route);
+        $this->assertEquals('123', $route->getParameters()['foo']);
+        $this->assertEquals('Hello, world!', $route->handle($request)->getData());
+    }
+
+    /** @test */
+    function route_parameter_with_regex_doesnt_falsly_match()
+    {
+        $router = new Router;
+        $router->get('/route/{foo:\d+}', fn () => 'Hello, world!');
+        $request = new Request('GET', '/route/1d23');
+
+        $this->expectException(NotFoundException::class);
+        $router->match($request);
     }
 }

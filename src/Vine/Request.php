@@ -31,8 +31,19 @@ class Request
     {
         if (!$route->acceptsMethod($this->getMethod())) return false;
 
+        $routeUri = str_replace('/', '\/', $route->getPattern());
+
+        preg_match('/\{([^\/\{\}]+)\}/', $routeUri, $regexPartParams);
+
+        if (!$regexPartParams) {
+            $regexPart = '[^\/\{\}]+';
+        } else {
+            array_shift($regexPartParams);
+            $regexPart = explode(':', $regexPartParams[0])[1] ?? '[^\/\{\}]+';
+        }
+
         $match = preg_match(
-            '/^' . preg_replace('/\{[^\/\{\}]+\}/', '([^\/\{\}]+)', str_replace('/', '\/', $route->getPattern())) . '$/',
+            '/^' . preg_replace('/\{[^\/\{\}]+\}/', '(' . $regexPart . ')', $routeUri) . '$/',
             $this->getURI(),
             $matches,
         );
@@ -41,7 +52,13 @@ class Request
 
         array_shift($matches);
 
-        $parameters = array_combine($route->getParameters(), $matches);
+        $parameters = array_combine(
+            array_map(
+                fn ($item) => explode(':', $item)[0],
+                $route->getParameters()
+            ),
+            $matches
+        );
 
         return true;
     }
