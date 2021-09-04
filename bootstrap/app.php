@@ -18,7 +18,7 @@ $router = $app->router();
 $router->get('/', fn () => 'Hello, world!');
 $router->get('/test', fn () => 'Test!');
 
-$router->get('/view', fn () => \Ketyl\Vine\View::createFromFile(__DIR__ . '/../views/index.html'));
+$router->get('/view', fn () => view(__DIR__ . '/../views/index.html'));
 
 $router->get('/class', [HomeController::class, 'index']);
 

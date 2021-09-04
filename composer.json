@@ -28,7 +28,10 @@
     "autoload-dev": {
         "psr-4": {
             "Ketyl\\Vine\\Tests\\": "tests"
-        }
+        },
+        "files": [
+            "src/Vine/Support/helpers.php"
+        ]
     },
     "scripts": {
         "test": [
