@@ -10,7 +10,7 @@ class AppTest extends TestCase
     /** @test */
     function can_create_app_instance()
     {
-        $app = new App;
+        $app = App::create();
 
         $this->assertInstanceOf(Router::class, $app->router());
     }

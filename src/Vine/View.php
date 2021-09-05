@@ -29,7 +29,11 @@ final class View
             throw new Exception(sprintf('File "%s" could not be found.', $filename));
         }
 
-        return new static(file_get_contents($filename));
+        if (!$data = file_get_contents($filename)) {
+            throw new Exception(sprintf('File "%s" could not be opened.', $filename));
+        }
+
+        return new static((string) $data);
     }
 
     /**

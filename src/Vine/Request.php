@@ -9,32 +9,27 @@ class Request
      *
      * @param string $method
      * @param string $uri
-     * @param mixed[]|null $server
      */
     public function __construct(
         protected string $method,
         protected string $uri,
-        protected ?array $server = null
     ) {
         $this->method = $method;
         $this->uri = $uri;
-        $this->server = $server ?? $_SERVER;
     }
 
     /**
      * Create a request from the server environment variables.
      *
-     * @param mixed[] $server
      * @return \Ketyl\Vine\Request
      */
-    public static function createFromServer(array $server): Request
+    public static function createFromGlobals(): Request
     {
-        $uri = rtrim(parse_url($server['REQUEST_URI'])['path'], '/');
+        $uri = rtrim((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
         return new Request(
-            $server['REQUEST_METHOD'],
-            $uri ? $uri : '/',
-            $server,
+            method: $_SERVER['REQUEST_METHOD'],
+            uri: $uri ? $uri : '/',
         );
     }
 

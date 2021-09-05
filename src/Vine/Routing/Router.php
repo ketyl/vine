@@ -84,7 +84,7 @@ class Router
      */
     public function getRoutes(): array
     {
-        return $this->routes;
+        return $this->routes ?? [];
     }
 
     /**
@@ -137,6 +137,8 @@ class Router
             '.*',
             str_replace('/', '\/', $route->getPattern())
         );
+
+        if (!$routeUri) return false;
 
         preg_match('/\{([^\/\{\}]+)\}/', $routeUri, $regexPartParams);
 

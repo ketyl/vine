@@ -12,7 +12,7 @@ class HomeController
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$app = new App();
+$app = App::create();
 $router = $app->router();
 
 $router->get('/', fn () => 'Hello, world!');

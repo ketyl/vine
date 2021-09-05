@@ -6,10 +6,32 @@ use Ketyl\Vine\Routing\Router;
 
 class App
 {
-    public function __construct(
-        protected ?Router $router = null
-    ) {
-        $this->router = $router ?? new Router;
+    /**
+     * @var \Ketyl\Vine\Routing\Router
+     */
+    protected Router $router;
+
+    /**
+     * Create a new App instance.
+     *
+     * @param \Ketyl\Vine\Routing\Router $router
+     */
+    public function __construct(Router $router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * Create a new instance of Vine.
+     *
+     * @param \Ketyl\Vine\Routing\Router|null $router
+     * @return \Ketyl\Vine\App
+     */
+    public static function create(Router $router = null): App
+    {
+        return new App(
+            $router ?? new Router,
+        );
     }
 
     /**
@@ -19,7 +41,7 @@ class App
      */
     public function run(): void
     {
-        $request = Request::createFromServer($_SERVER);
+        $request = Request::createFromGlobals();
 
         print($this->handle($request)->transform());
     }

@@ -9,12 +9,12 @@ class RequestTest extends TestCase
     /** @test */
     function can_create_request_using_server_globals()
     {
-        $server = [
+        $_SERVER = [
             'REQUEST_URI' => '/',
             'REQUEST_METHOD' => 'GET',
         ];
 
-        $request = Request::createFromServer($server);
+        $request = Request::createFromGlobals();
 
         $this->assertEquals('/', $request->getURI());
         $this->assertEquals('GET', $request->getMethod());
@@ -23,12 +23,12 @@ class RequestTest extends TestCase
     /** @test */
     function creating_request_from_globals_trims_uri()
     {
-        $server = [
+        $_SERVER = [
             'REQUEST_URI' => '/hello/world/',
             'REQUEST_METHOD' => 'GET',
         ];
 
-        $request = Request::createFromServer($server);
+        $request = Request::createFromGlobals();
 
         $this->assertEquals('/hello/world', $request->getURI());
     }

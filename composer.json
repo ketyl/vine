@@ -36,7 +36,7 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "stan": "vendor/bin/phpstan analyze src --level=6"
+        "stan": "vendor/bin/phpstan analyze src --level=8"
     },
     "config": {
         "sort-packages": true
