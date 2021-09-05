@@ -19,7 +19,7 @@ class Router
         foreach ($this->getRoutes() as $route) {
             $parameters = [];
 
-            if (!$request->matchesRoute($route, $parameters)) {
+            if (!$this->requestMatchesRoute($request, $route, $parameters)) {
                 continue;
             }
 
@@ -79,5 +79,45 @@ class Router
         }
 
         return [new $class, $method];
+    }
+
+    public function requestMatchesRoute(Request $request, Route $route, array &$parameters = []): bool
+    {
+        if (!$route->acceptsMethod($request->getMethod())) return false;
+
+        $routeUri = preg_replace(
+            '/(?=.*[^\.])\*(?=.*)/',
+            '.*',
+            str_replace('/', '\/', $route->getPattern())
+        );
+
+        preg_match('/\{([^\/\{\}]+)\}/', $routeUri, $regexPartParams);
+
+        if (!$regexPartParams) {
+            $regexPart = '[^\/\{\}]+';
+        } else {
+            array_shift($regexPartParams);
+            $regexPart = explode(':', $regexPartParams[0])[1] ?? '[^\/\{\}]+';
+        }
+
+        $match = preg_match(
+            '/^' . preg_replace('/\{[^\/\{\}]+\}/', '(' . $regexPart . ')', $routeUri) . '$/',
+            $request->getURI(),
+            $matches,
+        );
+
+        if (!$match) return false;
+
+        array_shift($matches);
+
+        $parameters = array_combine(
+            array_map(
+                fn ($item) => explode(':', $item)[0],
+                $route->getParameters()
+            ),
+            $matches
+        );
+
+        return true;
     }
 }
