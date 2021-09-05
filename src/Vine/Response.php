@@ -29,8 +29,6 @@ class Response
             return null;
         }
 
-        http_response_code($this->status);
-
         return match (gettype($this->data)) {
             'string' => $this->data,
             'array' => json_encode($this->data),
@@ -40,6 +38,18 @@ class Response
             },
             default => null,
         };
+    }
+
+    /**
+     * Emit the response.
+     *
+     * @return void
+     */
+    public function emit()
+    {
+        http_response_code($this->status);
+
+        echo $this->transform();
     }
 
     /**

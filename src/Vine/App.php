@@ -42,8 +42,8 @@ class App
     public function run(): void
     {
         $request = Request::createFromGlobals();
-
-        print($this->handle($request)->transform());
+        $response = $this->handle($request);
+        $response->emit();
     }
 
     /**
