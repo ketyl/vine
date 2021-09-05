@@ -25,7 +25,7 @@ jobs:
         uses: ramsey/composer-install@v1
 
       - name: Tests
-        run: vendor/bin/phpunit
+        run: composer run test
 
       - name: Static Analysis
-        run: vendor/bin/phpstan analyze src
+        run: composer run stan

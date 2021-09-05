@@ -35,10 +35,8 @@
         ]
     },
     "scripts": {
-        "test": [
-            "@phpunit"
-        ],
-        "phpunit": "phpunit"
+        "test": "vendor/bin/phpunit",
+        "stan": "vendor/bin/phpstan analyze src --level=6"
     },
     "config": {
         "sort-packages": true
