@@ -2,8 +2,6 @@
 
 namespace Ketyl\Vine;
 
-use Ketyl\Vine\Routing\Route;
-
 class Request
 {
     public function __construct(
@@ -16,7 +14,7 @@ class Request
         $this->server = $server ?? $_SERVER;
     }
 
-    public static function createFromServer(array $server)
+    public static function createFromServer(array $server): Request
     {
         $uri = rtrim(parse_url($server['REQUEST_URI'])['path'], '/');
 
@@ -27,12 +25,12 @@ class Request
         );
     }
 
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
 
-    public function getURI()
+    public function getURI(): string
     {
         return $this->uri;
     }

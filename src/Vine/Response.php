@@ -25,7 +25,9 @@ class Response
             'array' => json_encode($this->data),
             'object' => match (get_class($this->data)) {
                 \Ketyl\Vine\View::class => $this->data->getBody(),
+                default => null,
             },
+            default => null,
         };
     }
 

@@ -26,3 +26,6 @@ jobs:
 
       - name: Tests
         run: vendor/bin/phpunit
+
+      - name: Static Analysis
+        run: vendor/bin/phpstan analyze src

@@ -4,7 +4,7 @@ namespace Ketyl\Vine;
 
 use Exception;
 
-class View
+final class View
 {
     public function __construct(
         protected string $body
