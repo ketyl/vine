@@ -41,9 +41,9 @@ class App
      */
     public function run(): void
     {
-        $request = Request::createFromGlobals();
-        $response = $this->handle($request);
-        $response->emit();
+        $this->handle(
+            Request::createFromGlobals()
+        )->send();
     }
 
     /**
@@ -64,6 +64,8 @@ class App
      */
     private function handle(Request $request): Response
     {
-        return $this->router->match($request)->handle($request);
+        return $this->router
+            ->match($request)
+            ->handle($request);
     }
 }

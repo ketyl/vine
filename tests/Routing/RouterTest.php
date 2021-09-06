@@ -31,7 +31,7 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('Hello, world!', $route->handle($request)->getData());
+        $this->assertEquals('Hello, world!', $route->handle($request)->getBody());
     }
 
     /** @test */
@@ -44,7 +44,7 @@ class RouterTest extends TestCase
         $route = $router->match($request);
         $this->assertNotNull($route);
         $this->assertEquals('hello', $route->getParameters()['foo']);
-        $this->assertEquals('hello', $route->handle($request)->getData());
+        $this->assertEquals('hello', $route->handle($request)->getBody());
     }
 
     /** @test */
@@ -58,7 +58,7 @@ class RouterTest extends TestCase
         $this->assertNotNull($route);
         $this->assertEquals('hello', $route->getParameters()['foo']);
         $this->assertEquals('world', $route->getParameters()['baz']);
-        $this->assertEquals('hello world', $route->handle($request)->getData());
+        $this->assertEquals('hello world', $route->handle($request)->getBody());
     }
 
     /** @test */
@@ -70,7 +70,7 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('Hello, world!', $route->handle($request)->getData());
+        $this->assertEquals('Hello, world!', $route->handle($request)->getBody());
     }
 
     /** @test */
@@ -83,7 +83,7 @@ class RouterTest extends TestCase
         $route = $router->match($request);
         $this->assertNotNull($route);
         $this->assertEquals('123', $route->getParameters()['foo']);
-        $this->assertEquals('Hello, world!', $route->handle($request)->getData());
+        $this->assertEquals('Hello, world!', $route->handle($request)->getBody());
     }
 
     /** @test */

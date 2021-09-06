@@ -111,8 +111,7 @@ class Route
             throw new \Exception;
         }
 
-        return new Response(
-            call_user_func($this->callable, ...array_values($this->getParameters()))
-        );
+        return (new Response)
+            ->write(call_user_func($this->callable, ...array_values($this->getParameters())));
     }
 }

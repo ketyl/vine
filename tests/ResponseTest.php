@@ -7,37 +7,27 @@ use Ketyl\Vine\Response;
 class ResponseTest extends TestCase
 {
     /** @test */
-    function can_create_response_with_data()
+    function can_write_a_string_to_the_response_body()
     {
-        $response = new Response('some data');
+        $response = (new Response())->write('some data');
 
-        $this->assertNotNull($response->transform());
-        $this->assertEquals('some data', $response->getData());
+        $this->assertEquals('some data', $response->getBody());
     }
 
     /** @test */
-    function response_transformation_returns_null_for_empty_data()
+    function cannot_write_empty_array_to_response_body()
     {
-        $response = new Response([]);
+        $response = (new Response)->write([]);
 
-        $this->assertNull($response->transform());
+        $this->assertEmpty($response->getBody());
     }
 
     /** @test */
-    function response_transforms_string()
+    function can_write_array_to_response_body()
     {
-        $response = new Response('some data');
+        $response = (new Response)->write(['this' => 'that']);
 
-        $this->assertIsString($response->transform());
-        $this->assertEquals('some data', $response->transform());
-    }
-
-    /** @test */
-    function response_transforms_array()
-    {
-        $response = new Response(['this' => 'that']);
-
-        $this->assertIsString($response->transform());
-        $this->assertEquals('{"this":"that"}', $response->transform());
+        $this->assertIsString($response->getBody());
+        $this->assertEquals('{"this":"that"}', $response->getBody());
     }
 }
