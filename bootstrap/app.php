@@ -1,6 +1,7 @@
 <?php
 
 use Ketyl\Vine\App;
+use Ketyl\Vine\Container;
 
 class HomeController
 {
@@ -12,7 +13,7 @@ class HomeController
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$app = App::create();
+$app = new App;
 $router = $app->router();
 
 $router->get('/', fn () => 'Hello, world!');
@@ -27,3 +28,5 @@ $router->get('/param/{foo}', fn ($foo) => $foo);
 $router->get('/param/{foo}/{bar}', fn ($foo, $bar) => [$foo, $bar]);
 
 $router->get('*', fn () => 'Catch all!');
+
+dd(Container::getInstance());

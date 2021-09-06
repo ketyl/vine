@@ -16,14 +16,13 @@
         "php": "^8.0"
     },
     "require-dev": {
-        "phpstan/phpstan": "^0.12.98",
+        "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^9.5",
         "symfony/var-dumper": "^5.3"
     },
     "autoload": {
         "psr-4": {
-            "Ketyl\\": "src/",
-            "App\\": "app/"
+            "Ketyl\\": "src/"
         }
     },
     "autoload-dev": {

@@ -4,34 +4,13 @@ namespace Ketyl\Vine;
 
 use Ketyl\Vine\Routing\Router;
 
-class App
+class App extends Container
 {
-    /**
-     * @var \Ketyl\Vine\Routing\Router
-     */
-    protected Router $router;
-
-    /**
-     * Create a new App instance.
-     *
-     * @param \Ketyl\Vine\Routing\Router $router
-     */
-    public function __construct(Router $router)
+    public function __construct()
     {
-        $this->router = $router;
-    }
+        static::setInstance($this);
 
-    /**
-     * Create a new instance of Vine.
-     *
-     * @param \Ketyl\Vine\Routing\Router|null $router
-     * @return \Ketyl\Vine\App
-     */
-    public static function create(Router $router = null): App
-    {
-        return new App(
-            $router ?? new Router,
-        );
+        $this->register('router', Router::class);
     }
 
     /**
@@ -49,11 +28,11 @@ class App
     /**
      * Get the router instance.
      *
-     * @return \Ketyl\Vine\Routing\Router|null
+     * @return \Ketyl\Vine\Routing\Router
      */
-    public function router(): Router|null
+    public function router(): Router
     {
-        return $this->router;
+        return $this->get('router');
     }
 
     /**
@@ -64,7 +43,7 @@ class App
      */
     private function handle(Request $request): Response
     {
-        return $this->router
+        return $this->router()
             ->match($request)
             ->handle($request);
     }
