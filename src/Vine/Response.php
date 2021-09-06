@@ -36,6 +36,10 @@ class Response
             return '';
         }
 
+        if (is_array($data)) {
+            $this->addHeader('Content-Type', 'application/json');
+        }
+
         return match (gettype($data)) {
             'string' => $data,
             'array' => json_encode($data),
@@ -55,6 +59,10 @@ class Response
     public function send(): void
     {
         http_response_code($this->status);
+
+        foreach ($this->getHeaders() as $name => $value) {
+            header(sprintf('%s: %s', $name, $value));
+        }
 
         echo $this->getBody();
     }
