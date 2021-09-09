@@ -21,9 +21,9 @@ class ContainerTest extends TestCase
     {
         $container = new Container;
 
-        Container::setInstance($container);
+        Container::setGlobal($container);
 
-        $this->assertEquals($container, Container::getInstance());
+        $this->assertEquals($container, Container::getGlobal());
     }
 
     /** @test */
@@ -34,6 +34,8 @@ class ContainerTest extends TestCase
         $container->register('user', User::class);
 
         $this->assertInstanceOf(User::class, $container->get('user'));
+        $this->assertEmpty($container->get('user')->firstName);
+        $this->assertEmpty($container->get('user')->lastName);
     }
 
     /** @test */
@@ -42,6 +44,21 @@ class ContainerTest extends TestCase
         $container = new Container;
 
         $container->register('user', User::class, ['Zak', 'Nesler']);
+
+        $this->assertInstanceOf(User::class, $container->get('user'));
+        $this->assertEquals('Zak', $container->get('user')->firstName);
+        $this->assertEquals('Nesler', $container->get('user')->lastName);
+    }
+
+    /** @test */
+    function can_create_container_with_closure()
+    {
+        $container = new Container;
+
+        $container->register('user', User::class, [], function (User $user) {
+            $user->firstName = 'Zak';
+            $user->lastName = 'Nesler';
+        });
 
         $this->assertInstanceOf(User::class, $container->get('user'));
         $this->assertEquals('Zak', $container->get('user')->firstName);

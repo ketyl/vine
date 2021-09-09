@@ -40,7 +40,7 @@ class Container
      * @param \Ketyl\Vine\Container $container
      * @return \Ketyl\Vine\Container
      */
-    public static function setInstance(Container $container): Container
+    public static function setGlobal(Container $container): Container
     {
         return static::$instance = $container;
     }
@@ -50,7 +50,7 @@ class Container
      *
      * @return Container
      */
-    public static function getInstance(): Container
+    public static function getGlobal(): Container
     {
         return static::$instance;
     }
@@ -63,7 +63,7 @@ class Container
      * @param mixed[] $arguments
      * @return void
      */
-    public function register(string $name, string $class, array $arguments = [])
+    public function register(string $name, string $class, array $arguments = [], mixed $callback = null): void
     {
         unset($this->classes[$name]);
 
@@ -71,7 +71,7 @@ class Container
             return;
         }
 
-        $this->classes[$name] = [$name, $class, $arguments];
+        $this->classes[$name] = [$class, $arguments, $callback];
     }
 
     /**
@@ -86,10 +86,14 @@ class Container
             return null;
         }
 
-        if (!isset($this->instances[$name])) {
-            $class = $this->classes[$name];
+        $class = $this->classes[$name];
 
-            $this->instances[$name] = new $class[1](...$class[2]);
+        if (!isset($this->instances[$name])) {
+            $this->instances[$name] = new $class[0](...$class[1]);
+        }
+
+        if (is_callable($class[2])) {
+            call_user_func($class[2], $this->instances[$name]);
         }
 
         return $this->instances[$name];

@@ -3,6 +3,7 @@
 namespace Ketyl\Vine\Tests;
 
 use Ketyl\Vine\App;
+use Ketyl\Vine\Container;
 use Ketyl\Vine\Routing\Router;
 
 class AppTest extends TestCase
@@ -20,6 +21,7 @@ class AppTest extends TestCase
     {
         $app = new App;
 
-        $this->assertEquals($app, $app->getInstance());
+        $this->assertInstanceOf(Container::class, $app);
+        $this->assertEquals($app, $app->getGlobal());
     }
 }

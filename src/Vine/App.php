@@ -8,7 +8,7 @@ class App extends Container
 {
     public function __construct()
     {
-        static::setInstance($this);
+        static::setGlobal($this);
 
         $this->register('router', Router::class);
     }
