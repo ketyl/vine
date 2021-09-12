@@ -15,6 +15,14 @@ class HomeController
     }
 }
 
+class DownloadController
+{
+    public function __invoke($foo)
+    {
+        return 'Invoked with ' . $foo . '!';
+    }
+}
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new App;
@@ -24,6 +32,7 @@ $router->get('/', fn () => 'Hello, world!');
 $router->get('/test', fn () => 'Test!');
 
 $router->get('/class', [HomeController::class, 'index']);
+$router->get('/download/{foo}', DownloadController::class);
 
 $router->get('/view', [HomeController::class, 'view']);
 

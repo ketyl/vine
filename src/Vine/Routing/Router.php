@@ -74,6 +74,10 @@ class Router
             return $this->loadClass($callable[0], $callable[1]);
         }
 
+        if (class_exists($callable)) {
+            return $this->loadClass($callable);
+        }
+
         return null;
     }
 
@@ -107,7 +111,7 @@ class Router
      * @param string $method
      * @return mixed
      */
-    private function loadClass(string $class, string $method): mixed
+    private function loadClass(string $class, string $method = '__invoke'): mixed
     {
         if (!class_exists($class)) {
             throw new \Exception;

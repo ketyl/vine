@@ -10,6 +10,39 @@ use Ketyl\Vine\Exceptions\NotFoundException;
 class RouterTest extends TestCase
 {
     /** @test */
+    function can_create_route_using_a_closure()
+    {
+        $router = new Router;
+        $router->get('/route', fn () => 'Hello, world!');
+
+        $this->assertCount(1, $router->getRoutes());
+        $this->assertEquals('/route', $router->getRoutes()[0]->getPattern());
+        $this->assertEquals([], $router->getRoutes()[0]->getParameters());
+    }
+
+    /** @test */
+    function can_create_route_using_a_class_method()
+    {
+        $router = new Router;
+        $router->get('/route', [\Ketyl\Vine\Tests\Stubs\DemoController::class, 'index']);
+
+        $this->assertCount(1, $router->getRoutes());
+        $this->assertEquals('/route', $router->getRoutes()[0]->getPattern());
+        $this->assertEquals([], $router->getRoutes()[0]->getParameters());
+    }
+
+    /** @test */
+    function can_create_route_using_invoke()
+    {
+        $router = new Router;
+        $router->get('/route', \Ketyl\Vine\Tests\Stubs\DemoController::class);
+
+        $this->assertCount(1, $router->getRoutes());
+        $this->assertEquals('/route', $router->getRoutes()[0]->getPattern());
+        $this->assertEquals([], $router->getRoutes()[0]->getParameters());
+    }
+
+    /** @test */
     function can_create_get_route()
     {
         $router = new Router;
