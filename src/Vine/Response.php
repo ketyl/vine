@@ -32,10 +32,6 @@ class Response
      */
     public function transform(mixed $data): string
     {
-        if (!$data) {
-            return '';
-        }
-
         if (is_array($data)) {
             $this->addHeader('Content-Type', 'application/json');
         }

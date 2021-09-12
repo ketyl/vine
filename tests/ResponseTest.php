@@ -15,11 +15,11 @@ class ResponseTest extends TestCase
     }
 
     /** @test */
-    function cannot_write_empty_array_to_response_body()
+    function can_write_empty_array_to_response_body()
     {
         $response = (new Response)->write([]);
 
-        $this->assertEmpty($response->getBody());
+        $this->assertEquals('[]', $response->getBody());
     }
 
     /** @test */
