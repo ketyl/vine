@@ -65,6 +65,13 @@ class Container
         $this->classes[$name] = [$class, $arguments, $callback];
     }
 
+    /**
+     * Bind an instance of an object to the container.
+     *
+     * @param string $name
+     * @param mixed $callback
+     * @return void
+     */
     public function bind(string $name, mixed $callback)
     {
         $this->instances[$name] = $data = $callback();
