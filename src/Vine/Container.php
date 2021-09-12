@@ -16,23 +16,14 @@ class Container
      *
      * @var array[]
      */
-    protected array $classes;
+    protected array $classes = [];
 
     /**
      * List of registered instances.
      *
      * @var object[]
      */
-    protected array $instances;
-
-    /**
-     * Create a new Container instance.
-     */
-    public function __construct()
-    {
-        $this->classes = [];
-        $this->instances = [];
-    }
+    protected array $instances = [];
 
     /**
      * Set the global container instance.
@@ -72,6 +63,12 @@ class Container
         }
 
         $this->classes[$name] = [$class, $arguments, $callback];
+    }
+
+    public function bind(string $name, mixed $callback)
+    {
+        $this->instances[$name] = $data = $callback();
+        $this->classes[$name] = [get_class($data), [], $callback];
     }
 
     /**

@@ -1,13 +1,17 @@
 <?php
 
 use Ketyl\Vine\App;
-use Ketyl\Vine\Container;
 
 class HomeController
 {
     public function index()
     {
         return 'Hello, class!';
+    }
+
+    public function view()
+    {
+        return view(__DIR__ . '/../views/index.php');
     }
 }
 
@@ -19,14 +23,12 @@ $router = $app->router();
 $router->get('/', fn () => 'Hello, world!');
 $router->get('/test', fn () => 'Test!');
 
-$router->get('/view', fn () => view(__DIR__ . '/../views/index.html'));
-
 $router->get('/class', [HomeController::class, 'index']);
+
+$router->get('/view', [HomeController::class, 'view']);
 
 $router->get('/param/{foo:\d+}', fn ($foo) => 'Your number is ' . $foo);
 $router->get('/param/{foo}', fn ($foo) => $foo);
 $router->get('/param/{foo}/{bar}', fn ($foo, $bar) => [$foo, $bar]);
 
 $router->get('*', fn () => 'Catch all!');
-
-dd(Container::getInstance());

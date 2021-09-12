@@ -11,6 +11,7 @@ class App extends Container
         static::setGlobal($this);
 
         $this->register('router', Router::class);
+        $this->register('response', Response::class);
     }
 
     /**
@@ -20,9 +21,11 @@ class App extends Container
      */
     public function run(): void
     {
-        $this->handle(
-            Request::createFromGlobals()
-        )->send();
+        $this->bind('request', function () {
+            return Request::createFromGlobals();
+        });
+
+        $this->handle()->send();
     }
 
     /**
@@ -36,15 +39,37 @@ class App extends Container
     }
 
     /**
-     * Match the request to a route.
+     * Get the request instance.
      *
-     * @param \Ketyl\Vine\Request $request
+     * @return \Ketyl\Vine\Request
+     */
+    public function request(): Request
+    {
+        return $this->get('request');
+    }
+
+    /**
+     * Get the response instance.
+     *
      * @return \Ketyl\Vine\Response
      */
-    private function handle(Request $request): Response
+    public function response(): Response
+    {
+        return $this->get('response');
+    }
+
+    /**
+     * Match the request to a route.
+     *
+     * @return \Ketyl\Vine\Response
+     */
+    private function handle(): Response
     {
         return $this->router()
-            ->match($request)
-            ->handle($request);
+            ->match($this->request())
+            ->handle(
+                request: $this->request(),
+                response: $this->response(),
+            );
     }
 }

@@ -64,4 +64,18 @@ class ContainerTest extends TestCase
         $this->assertEquals('Zak', $container->get('user')->firstName);
         $this->assertEquals('Nesler', $container->get('user')->lastName);
     }
+
+    /** @test */
+    function can_define_how_object_is_created()
+    {
+        $container = new Container;
+
+        $container->bind('user', function () {
+            return new User('Zak', 'Nesler');
+        });
+
+        $this->assertInstanceOf(User::class, $container->get('user'));
+        $this->assertEquals('Zak', $container->get('user')->firstName);
+        $this->assertEquals('Nesler', $container->get('user')->lastName);
+    }
 }
