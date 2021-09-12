@@ -2,6 +2,7 @@
 
 namespace Ketyl\Vine\Routing;
 
+use Ketyl\Vine\App;
 use Ketyl\Vine\Request;
 use Ketyl\Vine\Response;
 
@@ -102,16 +103,19 @@ class Route
     /**
      * Call the route's callable and pass it its parameters.
      *
+     * @param \Ketyl\Vine\Response $response
      * @param \Ketyl\Vine\Request $request
      * @return \Ketyl\Vine\Response
      */
-    public function handle(Request $request): Response
+    public function handle(Request $request = null, Response $response = null): Response
     {
         if (!$this->callable) {
             throw new \Exception;
         }
 
-        return (new Response)
+        $response = $response ?? new Response;
+
+        return $response
             ->write(call_user_func($this->callable, ...array_values($this->getParameters())));
     }
 }

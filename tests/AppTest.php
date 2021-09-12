@@ -3,15 +3,17 @@
 namespace Ketyl\Vine\Tests;
 
 use Ketyl\Vine\App;
+use Ketyl\Vine\Container;
 use Ketyl\Vine\Routing\Router;
 
 class AppTest extends TestCase
 {
     /** @test */
-    function can_create_app_instance()
+    function app_instance_uses_container()
     {
-        $app = App::create();
+        $app = new App;
 
-        $this->assertInstanceOf(Router::class, $app->router());
+        $this->assertInstanceOf(Container::class, $app);
+        $this->assertEquals($app, $app->getGlobal());
     }
 }

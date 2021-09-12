@@ -8,19 +8,24 @@ class HomeController
     {
         return 'Hello, class!';
     }
+
+    public function view()
+    {
+        return view(__DIR__ . '/../views/index.php');
+    }
 }
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$app = App::create();
+$app = new App;
 $router = $app->router();
 
 $router->get('/', fn () => 'Hello, world!');
 $router->get('/test', fn () => 'Test!');
 
-$router->get('/view', fn () => view(__DIR__ . '/../views/index.html'));
-
 $router->get('/class', [HomeController::class, 'index']);
+
+$router->get('/view', [HomeController::class, 'view']);
 
 $router->get('/param/{foo:\d+}', fn ($foo) => 'Your number is ' . $foo);
 $router->get('/param/{foo}', fn ($foo) => $foo);

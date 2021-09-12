@@ -4,34 +4,14 @@ namespace Ketyl\Vine;
 
 use Ketyl\Vine\Routing\Router;
 
-class App
+class App extends Container
 {
-    /**
-     * @var \Ketyl\Vine\Routing\Router
-     */
-    protected Router $router;
-
-    /**
-     * Create a new App instance.
-     *
-     * @param \Ketyl\Vine\Routing\Router $router
-     */
-    public function __construct(Router $router)
+    public function __construct()
     {
-        $this->router = $router;
-    }
+        static::setGlobal($this);
 
-    /**
-     * Create a new instance of Vine.
-     *
-     * @param \Ketyl\Vine\Routing\Router|null $router
-     * @return \Ketyl\Vine\App
-     */
-    public static function create(Router $router = null): App
-    {
-        return new App(
-            $router ?? new Router,
-        );
+        $this->register('router', Router::class);
+        $this->register('response', Response::class);
     }
 
     /**
@@ -41,31 +21,55 @@ class App
      */
     public function run(): void
     {
-        $this->handle(
-            Request::createFromGlobals()
-        )->send();
+        $this->bind('request', function () {
+            return Request::createFromGlobals();
+        });
+
+        $this->handle()->send();
     }
 
     /**
      * Get the router instance.
      *
-     * @return \Ketyl\Vine\Routing\Router|null
+     * @return \Ketyl\Vine\Routing\Router
      */
-    public function router(): Router|null
+    public static function router(): Router
     {
-        return $this->router;
+        return static::getGlobal()->get('router');
+    }
+
+    /**
+     * Get the request instance.
+     *
+     * @return \Ketyl\Vine\Request
+     */
+    public static function request(): Request
+    {
+        return static::getGlobal()->get('request');
+    }
+
+    /**
+     * Get the response instance.
+     *
+     * @return \Ketyl\Vine\Response
+     */
+    public static function response(): Response
+    {
+        return static::getGlobal()->get('response');
     }
 
     /**
      * Match the request to a route.
      *
-     * @param \Ketyl\Vine\Request $request
      * @return \Ketyl\Vine\Response
      */
-    private function handle(Request $request): Response
+    private function handle(): Response
     {
-        return $this->router
-            ->match($request)
-            ->handle($request);
+        return $this->router()
+            ->match($this->request())
+            ->handle(
+                request: $this->request(),
+                response: $this->response(),
+            );
     }
 }

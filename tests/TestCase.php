@@ -8,6 +8,6 @@ abstract class TestCase extends PHPUnitTestCase
 {
     protected function getStubPath(string $filename)
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $filename;
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Stubs' . DIRECTORY_SEPARATOR . $filename;
     }
 }
