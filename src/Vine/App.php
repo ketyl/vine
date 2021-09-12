@@ -33,9 +33,9 @@ class App extends Container
      *
      * @return \Ketyl\Vine\Routing\Router
      */
-    public function router(): Router
+    public static function router(): Router
     {
-        return $this->get('router');
+        return static::getGlobal()->get('router');
     }
 
     /**
@@ -43,9 +43,9 @@ class App extends Container
      *
      * @return \Ketyl\Vine\Request
      */
-    public function request(): Request
+    public static function request(): Request
     {
-        return $this->get('request');
+        return static::getGlobal()->get('request');
     }
 
     /**
@@ -53,9 +53,9 @@ class App extends Container
      *
      * @return \Ketyl\Vine\Response
      */
-    public function response(): Response
+    public static function response(): Response
     {
-        return $this->get('response');
+        return static::getGlobal()->get('response');
     }
 
     /**
