@@ -8,12 +8,16 @@ Inspired by popular PHP frameworks such as Laravel and Slim, Vine maintains a fo
 
 ### Features
 
-- [x] Flexible, minimal routing engine
+- [x] Flexible routing engine
+- [x] Service container
+- [x] Basic view support
 
 ### Roadmap
 
+- [ ] Dependency injection
 - [ ] Multiple return types
 - [ ] Basic templating engine
+- [ ] Basic middleware support
 - [ ] Adherence to PSR standards (routing, middleware, etc.)
 
 ### Installation
@@ -27,14 +31,18 @@ composer require ketyl/vine
 Once installed, you may create an instance of `Ketyl\Vine\App`, add your routes, and run the application:
 
 ```php
+// Create a new application instance
 $app = new App();
 $router = $app->router();
 
 // Anonymous function
 $router->get('/', fn () => 'Hello, world!');
 
-// Class-based
+// Class-based route using a method
 $router->get('/posts', [PostController::class, 'index']);
+
+// Class-based route using __invoke
+$router->get('/download', DownloadController::class);
 
 // Route parameters
 $router->get('/param/{foo}', fn ($foo) => $foo);
@@ -45,5 +53,6 @@ $router->get('/regex/{foo:\d+}', fn ($foo) => $foo);
 // Return a view
 $router->get('/view', fn () => view(__DIR__ . '/../views/index.html'));
 
+// Attempt to match the request's URI with the registered routes
 $app->run();
 ```
