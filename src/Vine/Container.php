@@ -2,7 +2,9 @@
 
 namespace Ketyl\Vine;
 
-class Container
+use Psr\Container\ContainerInterface;
+
+class Container implements ContainerInterface
 {
     /**
      * Global container instance.
@@ -101,6 +103,17 @@ class Container
         }
 
         return $this->instances[$name];
+    }
+
+    /**
+     * Determine if the container includes specified item.
+     *
+     * @param string $name
+     * @return boolean
+     */
+    public function has(string $name): bool
+    {
+        return array_key_exists($name, $this->classes);
     }
 
     /**

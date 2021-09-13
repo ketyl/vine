@@ -78,4 +78,16 @@ class ContainerTest extends TestCase
         $this->assertEquals('Zak', $container->get('user')->firstName);
         $this->assertEquals('Nesler', $container->get('user')->lastName);
     }
+
+    /** @test */
+    function can_determine_if_item_is_in_container()
+    {
+        $container = new Container;
+
+        $this->assertFalse($container->has('user'));
+
+        $container->register('user', User::class);
+
+        $this->assertTrue($container->has('user'));
+    }
 }
