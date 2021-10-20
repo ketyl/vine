@@ -31,17 +31,9 @@ $app = new App;
 $router = $app->router();
 
 $app->addMiddleware(function (Request $request, Response $response, $next) {
-    $response->write('BEFORE');
+    // $response->write('BEFORE');
     $response = $next($request, $response);
-    $response->write('AFTER');
-
-    return $response;
-});
-
-$app->addMiddleware(function (Request $request, Response $response, $next) {
-    $response->write('BEFORE');
-    $response = $next($request, $response);
-    $response->write('AFTER');
+    // $response->write('AFTER');
 
     return $response;
 });
