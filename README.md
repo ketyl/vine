@@ -48,7 +48,10 @@ $router->get('/download', DownloadController::class);
 $router->get('/param/{foo}', fn ($foo) => $foo);
 
 // Route parameters with RegEx restriction
-$router->get('/regex/{foo:\d+}', fn ($foo) => $foo);
+$router->get('/regex-a/{foo:\d+}', fn ($foo) => $foo);
+
+// Basic RegEx restriction
+$router->get('/regex-b/\d+', fn ($foo) => $foo);
 
 // Return a view
 $router->get('/view', fn () => view(__DIR__ . '/../views/index.html'));
