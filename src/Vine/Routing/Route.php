@@ -118,13 +118,10 @@ class Route
         $callback = fn () => $response->write(call_user_func($this->callable, ...array_values($this->getParameters())));
 
         foreach ($middlewareStack as $next) {
-            $callback = $next($request, $response, $callback);
+            $callback = fn () => $next($request, $response, $callback);
         }
 
-        if (is_callable($callback)) {
-            return $callback();
-        }
 
-        return $callback;
+        return call_user_func($callback);
     }
 }
