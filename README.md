@@ -12,11 +12,11 @@ Inspired by popular PHP frameworks such as Laravel and Slim, Vine maintains a fo
 - [x] Service container
 - [x] Basic view support
 - [x] Basic middleware support
+- [x] Multiple return types
 
 ### Roadmap
 
 - [ ] Dependency injection
-- [ ] Multiple return types
 - [ ] Basic templating engine
 - [ ] Adherence to PSR standards (routing, middleware, etc.)
 
