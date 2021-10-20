@@ -121,7 +121,6 @@ class Route
             $callback = fn () => $next($request, $response, $callback);
         }
 
-
         return call_user_func($callback);
     }
 }
