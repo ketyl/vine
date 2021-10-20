@@ -107,7 +107,7 @@ class Route
      * @param \Ketyl\Vine\Request $request
      * @return \Ketyl\Vine\Response
      */
-    public function handle(Request $request = null, Response $response = null): Response
+    public function handle(array $middlewareStack, Request $request, Response $response): Response
     {
         if (!$this->callable) {
             throw new \Exception;
@@ -115,7 +115,16 @@ class Route
 
         $response = $response ?? new Response;
 
-        return $response
-            ->write(call_user_func($this->callable, ...array_values($this->getParameters())));
+        $callback = fn () => $response->write(call_user_func($this->callable, ...array_values($this->getParameters())));
+
+        foreach ($middlewareStack as $next) {
+            $callback = $next($request, $response, $callback);
+        }
+
+        if (is_callable($callback)) {
+            return $callback();
+        }
+
+        return $callback;
     }
 }

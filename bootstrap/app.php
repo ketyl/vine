@@ -1,6 +1,8 @@
 <?php
 
 use Ketyl\Vine\App;
+use Ketyl\Vine\Request;
+use Ketyl\Vine\Response;
 
 class HomeController
 {
@@ -27,6 +29,14 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new App;
 $router = $app->router();
+
+$app->addMiddleware(function (Request $request, Response $response, $next) {
+    $response->write('BEFORE');
+    $response = $next($request, $response);
+    $response->write('AFTER');
+
+    return $response;
+});
 
 $router->get('/', fn () => 'Hello, world!');
 $router->get('/test', fn () => 'Test!');
