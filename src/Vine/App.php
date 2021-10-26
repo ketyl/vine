@@ -35,6 +35,11 @@ class App extends Container
         $this->middlewareStack[] = $callback;
     }
 
+    public function getGlobalMiddleware()
+    {
+        return $this->middlewareStack;
+    }
+
     /**
      * Get the router instance.
      *
