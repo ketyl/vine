@@ -1,6 +1,6 @@
 <?php
 
-namespace Ketyl\Vine\Contracts;
+namespace Ketyl\Vine\Traits;
 
 use Ketyl\Vine\Request;
 use Ketyl\Vine\Response;

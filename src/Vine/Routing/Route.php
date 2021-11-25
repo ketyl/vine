@@ -5,7 +5,7 @@ namespace Ketyl\Vine\Routing;
 use Ketyl\Vine\App;
 use Ketyl\Vine\Request;
 use Ketyl\Vine\Response;
-use Ketyl\Vine\Contracts\HasMiddleware;
+use Ketyl\Vine\Traits\HasMiddleware;
 
 class Route
 {

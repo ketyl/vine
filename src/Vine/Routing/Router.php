@@ -4,7 +4,7 @@ namespace Ketyl\Vine\Routing;
 
 use Ketyl\Vine\Request;
 use Ketyl\Vine\Routing\Route;
-use Ketyl\Vine\Contracts\HasMiddleware;
+use Ketyl\Vine\Traits\HasMiddleware;
 use Ketyl\Vine\Exceptions\NotFoundException;
 
 class Router
