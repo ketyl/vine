@@ -6,8 +6,6 @@ use Ketyl\Vine\Routing\Router;
 
 class App extends Container
 {
-    protected $middlewareStack = [];
-
     public function __construct()
     {
         static::setGlobal($this);
@@ -28,16 +26,6 @@ class App extends Container
         });
 
         $this->handle()->send();
-    }
-
-    public function addMiddleware($callback)
-    {
-        $this->middlewareStack[] = $callback;
-    }
-
-    public function getGlobalMiddleware()
-    {
-        return $this->middlewareStack;
     }
 
     /**
@@ -80,7 +68,6 @@ class App extends Container
         return $this->router()
             ->match($this->request())
             ->handle(
-                $this->middlewareStack,
                 request: $this->request(),
                 response: $this->response(),
             );

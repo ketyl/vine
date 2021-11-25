@@ -30,7 +30,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $app = new App;
 $router = $app->router();
 
-$app->addMiddleware(function (Request $request, Response $response, $next) {
+$router->addMiddleware(function (Request $request, Response $response, $next) {
     // $response->write('BEFORE');
     $response = $next($request, $response);
     // $response->write('AFTER');

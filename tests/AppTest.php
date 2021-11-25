@@ -11,9 +11,7 @@ class AppTest extends TestCase
     /** @test */
     function app_instance_uses_container()
     {
-        $app = new App;
-
-        $this->assertInstanceOf(Container::class, $app);
-        $this->assertEquals($app, $app->getGlobal());
+        $this->assertInstanceOf(Container::class, $this->app);
+        $this->assertEquals($this->app, $this->app->getGlobal());
     }
 }

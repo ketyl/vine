@@ -5,9 +5,12 @@ namespace Ketyl\Vine\Routing;
 use Ketyl\Vine\App;
 use Ketyl\Vine\Request;
 use Ketyl\Vine\Response;
+use Ketyl\Vine\Contracts\HasMiddleware;
 
 class Route
 {
+    use HasMiddleware;
+
     /**
      * Create a new request object.
      *
@@ -107,7 +110,7 @@ class Route
      * @param \Ketyl\Vine\Request $request
      * @return \Ketyl\Vine\Response
      */
-    public function handle(array $middlewareStack, Request $request, Response $response): Response
+    public function handle(Request $request, Response|null $response = null): Response
     {
         if (!$this->callable) {
             throw new \Exception;
@@ -115,11 +118,13 @@ class Route
 
         $response = $response ?? new Response;
 
-        $callback = fn () => $response->write(call_user_func($this->callable, ...array_values($this->getParameters())));
+        $this->addMiddleware(App::router()->getMiddleware());
 
-        foreach ($middlewareStack as $next) {
-            $callback = fn () => $next($request, $response, $callback);
-        }
+        $callback = $this->executeMiddlewareStack(
+            $request,
+            $response,
+            fn () => $response->write(call_user_func($this->callable, ...array_values($this->getParameters())))
+        );
 
         return call_user_func($callback);
     }
