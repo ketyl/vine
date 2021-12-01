@@ -1,8 +1,8 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 use Ketyl\Vine\App;
-use Ketyl\Vine\Request;
-use Ketyl\Vine\Response;
 
 class HomeController
 {
@@ -25,7 +25,6 @@ class DownloadController
     }
 }
 
-require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new App;
 $router = $app->router();
