@@ -4,7 +4,6 @@ namespace Ketyl\Vine\Tests;
 
 use Ketyl\Vine\App;
 use Ketyl\Vine\Request;
-use Ketyl\Vine\Response;
 
 class MiddlewareTest extends TestCase
 {
@@ -22,6 +21,32 @@ class MiddlewareTest extends TestCase
     }
 
     /** @test */
+    function can_create_route_specific_middleware()
+    {
+        $app = new App;
+
+        $app->router()->get('/this', fn () => 'hello');
+
+        $app->router()->get('/that', fn () => 'hello')
+            ->addMiddleware(function ($request, $response, $next) {
+                $response->write('BEFORE');
+                return $next($request, $response);
+            });
+
+        $requestA = new Request('GET', '/this');
+        $this->assertEquals(
+            'hello',
+            $app->router()->match($requestA)->handle($requestA)->getBody(),
+        );
+
+        $requestB = new Request('GET', '/that');
+        $this->assertEquals(
+            'BEFOREhello',
+            $app->router()->match($requestB)->handle($requestB)->getBody(),
+        );
+    }
+
+    /** @test */
     function middleware_can_call_next()
     {
         $app = new App;
@@ -33,11 +58,10 @@ class MiddlewareTest extends TestCase
         });
 
         $request = new Request('GET', '/');
-        $response = new Response;
 
         $this->assertEquals(
             'hello',
-            $app->router()->match($request)->handle($request, $response)->getBody()
+            $app->router()->match($request)->handle($request)->getBody()
         );
     }
 
@@ -54,11 +78,10 @@ class MiddlewareTest extends TestCase
         });
 
         $request = new Request('GET', '/');
-        $response = new Response;
 
         $this->assertEquals(
             'BEFOREhello',
-            $app->router()->match($request)->handle($request, $response)->getBody()
+            $app->router()->match($request)->handle($request)->getBody()
         );
     }
 
@@ -76,11 +99,10 @@ class MiddlewareTest extends TestCase
         });
 
         $request = new Request('GET', '/');
-        $response = new Response;
 
         $this->assertEquals(
             'helloAFTER',
-            $app->router()->match($request)->handle($request, $response)->getBody()
+            $app->router()->match($request)->handle($request)->getBody()
         );
     }
 
@@ -99,11 +121,10 @@ class MiddlewareTest extends TestCase
         });
 
         $request = new Request('GET', '/');
-        $response = new Response;
 
         $this->assertEquals(
             'BEFOREhelloAFTER',
-            $app->router()->match($request)->handle($request, $response)->getBody()
+            $app->router()->match($request)->handle($request)->getBody()
         );
     }
 }
