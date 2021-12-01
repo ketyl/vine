@@ -67,9 +67,6 @@ class App extends Container
     {
         return $this->router()
             ->match($this->request())
-            ->handle(
-                request: $this->request(),
-                response: $this->response(),
-            );
+            ->handle($this->request(), $this->response());
     }
 }

@@ -4,10 +4,13 @@ namespace Ketyl\Vine\Routing;
 
 use Ketyl\Vine\Request;
 use Ketyl\Vine\Routing\Route;
+use Ketyl\Vine\Traits\HasMiddleware;
 use Ketyl\Vine\Exceptions\NotFoundException;
 
 class Router
 {
+    use HasMiddleware;
+
     /**
      * Create a new router instance.
      *

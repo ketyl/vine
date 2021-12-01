@@ -1,6 +1,8 @@
 <?php
 
 use Ketyl\Vine\App;
+use Ketyl\Vine\Request;
+use Ketyl\Vine\Response;
 
 class HomeController
 {

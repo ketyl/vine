@@ -11,13 +11,13 @@ Inspired by popular PHP frameworks such as Laravel and Slim, Vine maintains a fo
 - [x] Flexible routing engine
 - [x] Service container
 - [x] Basic view support
+- [x] Basic middleware support
+- [x] Multiple return types
 
 ### Roadmap
 
 - [ ] Dependency injection
-- [ ] Multiple return types
 - [ ] Basic templating engine
-- [ ] Basic middleware support
 - [ ] Adherence to PSR standards (routing, middleware, etc.)
 
 ### Installation
@@ -35,8 +35,27 @@ Once installed, you may create an instance of `Ketyl\Vine\App`, add your routes,
 $app = new App();
 $router = $app->router();
 
+// Add global middleware
+$router->addMiddleware(function (Request $request, Response $response, $next) {
+    $response->write('BEFORE');
+    $response = $next($request, $response);
+    $response->write('AFTER');
+
+    return $response;
+});
+
 // Anonymous function
 $router->get('/', fn () => 'Hello, world!');
+
+// Adding route-specific middleware
+$router->get('/', fn () => 'Hello, world!')
+    ->addMiddleware(function (Request $request, Response $response, $next) {
+        $response->write('BEFORE');
+        $response = $next($request, $response);
+        $response->write('AFTER');
+
+        return $response;
+    });
 
 // Class-based route using a method
 $router->get('/posts', [PostController::class, 'index']);
