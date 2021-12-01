@@ -104,7 +104,7 @@ class Route
     }
 
     /**
-     * Call the route's callable and pass it its parameters.
+     * Call the route's callable and pass it its parameters and generate a response.
      *
      * @param \Ketyl\Vine\Response $response
      * @param \Ketyl\Vine\Request $request

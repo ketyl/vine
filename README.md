@@ -36,7 +36,7 @@ $app = new App();
 $router = $app->router();
 
 // Add global middleware
-$app->addMiddleware(function (Request $request, Response $response, $next) {
+$router->addMiddleware(function (Request $request, Response $response, $next) {
     $response->write('BEFORE');
     $response = $next($request, $response);
     $response->write('AFTER');
@@ -46,6 +46,16 @@ $app->addMiddleware(function (Request $request, Response $response, $next) {
 
 // Anonymous function
 $router->get('/', fn () => 'Hello, world!');
+
+// Adding route-specific middleware
+$router->get('/', fn () => 'Hello, world!')
+    ->addMiddleware(function (Request $request, Response $response, $next) {
+        $response->write('BEFORE');
+        $response = $next($request, $response);
+        $response->write('AFTER');
+
+        return $response;
+    });
 
 // Class-based route using a method
 $router->get('/posts', [PostController::class, 'index']);

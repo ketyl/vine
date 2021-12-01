@@ -30,14 +30,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $app = new App;
 $router = $app->router();
 
-$router->addMiddleware(function (Request $request, Response $response, $next) {
-    // $response->write('BEFORE');
-    $response = $next($request, $response);
-    // $response->write('AFTER');
-
-    return $response;
-});
-
 $router->get('/', fn () => 'Hello, world!');
 $router->get('/test', fn () => 'Test!');
 
