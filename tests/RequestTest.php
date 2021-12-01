@@ -7,6 +7,18 @@ use Ketyl\Vine\Request;
 class RequestTest extends TestCase
 {
     /** @test */
+    function can_create_request()
+    {
+        $request = new Request(
+            method: 'GET',
+            uri: '/this/that',
+        );
+
+        $this->assertEquals('GET', $request->getMethod());
+        $this->assertEquals('/this/that', $request->getURI());
+    }
+
+    /** @test */
     function can_create_request_using_server_globals()
     {
         $_SERVER = [

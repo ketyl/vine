@@ -102,7 +102,7 @@ class Response
      * @param mixed $value
      * @return self
      */
-    public function addHeader(mixed $name, mixed $value): self
+    public function addHeader(mixed $name, mixed $value = null): self
     {
         if (is_array($name)) {
             foreach ($name as $key => $value) {
