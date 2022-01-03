@@ -118,7 +118,7 @@ class Route
 
         $response = $response ?? new Response;
 
-        $this->addMiddleware(App::router()->getMiddleware());
+        $this->addMiddleware(App::router()->getRoutes()->getMiddleware());
 
         $callback = $this->executeMiddlewareStack(
             $request,

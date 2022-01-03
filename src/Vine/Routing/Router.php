@@ -9,17 +9,16 @@ use Ketyl\Vine\Exceptions\NotFoundException;
 
 class Router
 {
-    use HasMiddleware;
+    protected RouteGroup $routes;
 
     /**
      * Create a new router instance.
      *
-     * @param Route[]|null $routes
+     * @param Route[] $routes
      */
-    public function __construct(
-        protected ?array $routes = null
-    ) {
-        $this->routes = $routes;
+    public function __construct(array $routes = [])
+    {
+        $this->routes = new RouteGroup($routes);
     }
 
     /**
@@ -54,7 +53,7 @@ class Router
      */
     public function get(string $pattern, mixed $callable): Route
     {
-        return $this->addRoute(Route::create(
+        return $this->getRoutes()->add(Route::create(
             methods: ['GET', 'HEAD'],
             pattern: $pattern,
             callable: $this->mutateCallable($callable),
@@ -87,24 +86,11 @@ class Router
     /**
      * Get the registered routes.
      *
-     * @return Route[]
+     * @return RouteGroup
      */
-    public function getRoutes(): array
+    public function getRoutes(): RouteGroup
     {
-        return $this->routes ?? [];
-    }
-
-    /**
-     * Add a route to the router's collection.
-     *
-     * @param \Ketyl\Vine\Routing\Route $route
-     * @return \Ketyl\Vine\Routing\Route
-     */
-    private function addRoute(Route $route): Route
-    {
-        $this->routes[] = $route;
-
-        return $route;
+        return $this->routes;
     }
 
     /**
