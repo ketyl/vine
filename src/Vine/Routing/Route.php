@@ -76,7 +76,7 @@ class Route
     }
 
     /**
-     * Get the URI pattern matched by the route, excluding regex.
+     * Get the URI pattern matched by the route, excluding pattern.
      *
      * @return string
      */
@@ -106,13 +106,13 @@ class Route
         return null;
     }
 
-    public function param(string $name, string $regex = '.*'): Route
+    public function param(string $name, string $pattern = '.*'): Route
     {
         $param = $this->getParameter($name);
 
         if (!$param) return $this;
 
-        $param->setRegex($regex);
+        $param->setPattern($pattern);
 
         return $this;
     }

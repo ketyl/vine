@@ -4,21 +4,21 @@ namespace Ketyl\Vine\Routing;
 
 class Parameter
 {
-    const DEFAULT_REGEX = '[^\/\{\}]+';
+    const DEFAULT_PATTERN = '[^\/\{\}]+';
 
     public function __construct(
         protected string $name,
         protected mixed $value = null,
-        protected string $regex = self::DEFAULT_REGEX,
+        protected string $pattern = self::DEFAULT_PATTERN,
     ) {
         $this->name = $name;
         $this->value = $value;
-        $this->regex = $regex;
+        $this->pattern = $pattern;
     }
 
-    public static function fromParts(string $name, string $regex = self::DEFAULT_REGEX)
+    public static function fromParts(string $name, string $pattern = self::DEFAULT_PATTERN)
     {
-        return new static($name, null, $regex);
+        return new static($name, null, $pattern);
     }
 
     public function getName()
@@ -31,9 +31,9 @@ class Parameter
         return $this->value;
     }
 
-    public function getRegex()
+    public function getPattern()
     {
-        return $this->regex;
+        return $this->pattern;
     }
 
     public function setValue(string $value)
@@ -41,8 +41,8 @@ class Parameter
         $this->value = $value;
     }
 
-    public function setRegex(string $regex)
+    public function setPattern(string $pattern)
     {
-        $this->regex = $regex;
+        $this->pattern = $pattern;
     }
 }

@@ -123,18 +123,16 @@ class Router
         // Replace wildcard with default search regex
         $search = preg_replace(
             '/(?=.*[^\.])\*(?=.*)/',
-            Parameter::DEFAULT_REGEX,
-            str_replace(['/', '.*'], ['\/', Parameter::DEFAULT_REGEX], $route->getPattern())
+            Parameter::DEFAULT_PATTERN,
+            str_replace(['/', '.*'], ['\/', Parameter::DEFAULT_PATTERN], $route->getPattern())
         );
 
         if (!$search) return false;
 
-        preg_match('/\{([^\/\{\}]+)\}/', $search, $regexPartParams);
-
         $paramNames = [];
         foreach ($route->getParameters() as $param) {
             $paramNames[] = $param->getName();
-            $search = str_replace(sprintf('{%s}', $param->getName()), '(' . $param->getRegex() . ')', $search);
+            $search = str_replace(sprintf('{%s}', $param->getName()), '(' . $param->getPattern() . ')', $search);
         }
 
         $routeMatches = preg_match(

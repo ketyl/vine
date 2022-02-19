@@ -33,7 +33,7 @@ class RouteTest extends TestCase
 
         $this->assertCount(1, $route->getParameters());
         $this->assertEquals('foo', $route->getParameter('foo')->getName());
-        $this->assertEquals(Parameter::DEFAULT_REGEX, $route->getParameter('foo')->getRegex());
+        $this->assertEquals(Parameter::DEFAULT_PATTERN, $route->getParameter('foo')->getPattern());
     }
 
     /** @test */
@@ -53,6 +53,6 @@ class RouteTest extends TestCase
 
         $this->assertCount(1, $route->getParameters());
         $this->assertEquals('foo', $route->getParameter('foo')->getName());
-        $this->assertEquals('\d+', $route->getParameter('foo')->getRegex());
+        $this->assertEquals('\d+', $route->getParameter('foo')->getPattern());
     }
 }
