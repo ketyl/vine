@@ -17,7 +17,7 @@ class Route
      * @param string[] $methods
      * @param string $pattern
      * @param mixed $callable
-     * @param string[] $parameters
+     * @param Parameter[] $parameters
      */
     public function __construct(
         protected array $methods,
@@ -47,7 +47,10 @@ class Route
             methods: is_array($methods) ? $methods : [$methods],
             pattern: $pattern,
             callable: $callable,
-            parameters: $parameters[0],
+            parameters: array_map(
+                fn ($param) => Parameter::fromParts(...explode(':', $param)),
+                $parameters[0]
+            ),
         );
     }
 
@@ -73,34 +76,58 @@ class Route
     }
 
     /**
-     * Get the URI pattern matched by the route.
+     * Get the URI pattern matched by the route, excluding pattern.
      *
      * @return string
      */
     public function getPattern(): string
     {
-        return $this->pattern;
+        return preg_replace('/:([^\/\{\}]+)\}/', '}', $this->pattern);
     }
 
     /**
      * Get the route parameters.
      *
-     * @return mixed[]
+     * @return Parameter[]
      */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
+    public function getParameter(string $name): Parameter
+    {
+        foreach ($this->parameters as $param) {
+            if ($param->getName() == $name) {
+                return $param;
+            }
+        }
+
+        return null;
+    }
+
+    public function param(string $name, string $pattern = '.*'): Route
+    {
+        $param = $this->getParameter($name);
+
+        if (!$param) return $this;
+
+        $param->setPattern($pattern);
+
+        return $this;
+    }
+
     /**
-     * Set the route parameters.
+     * Set the route parameter values.
      *
      * @param mixed[] $values
-     * @return mixed[]
+     * @return void
      */
-    public function setParameters(array $values): array
+    public function setParameterValues(array $params): void
     {
-        return $this->parameters = $values;
+        foreach ($params as $key => $value) {
+            $this->getParameter($key)->setValue($value);
+        }
     }
 
     /**
@@ -118,12 +145,12 @@ class Route
 
         $response = $response ?? new Response;
 
-        $this->addMiddleware(App::router()->getMiddleware());
+        $this->addMiddleware(App::router()->getRoutes()->getMiddleware());
 
         $callback = $this->executeMiddlewareStack(
             $request,
             $response,
-            fn () => $response->write(call_user_func($this->callable, ...array_values($this->getParameters())))
+            fn () => $response->write(call_user_func($this->callable, ...array_map(fn ($param) => $param->getValue(), $this->getParameters()))),
         );
 
         return call_user_func($callback);

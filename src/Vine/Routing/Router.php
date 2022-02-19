@@ -9,17 +9,16 @@ use Ketyl\Vine\Exceptions\NotFoundException;
 
 class Router
 {
-    use HasMiddleware;
+    protected RouteGroup $routes;
 
     /**
      * Create a new router instance.
      *
-     * @param Route[]|null $routes
+     * @param Route[] $routes
      */
-    public function __construct(
-        protected ?array $routes = null
-    ) {
-        $this->routes = $routes;
+    public function __construct(array $routes = [])
+    {
+        $this->routes = new RouteGroup($routes);
     }
 
     /**
@@ -31,13 +30,9 @@ class Router
     public function match(Request $request): Route
     {
         foreach ($this->getRoutes() as $route) {
-            $parameters = [];
-
-            if (!$this->requestMatchesRoute($request, $route, $parameters)) {
+            if (!$this->requestMatchesRoute($request, $route)) {
                 continue;
             }
-
-            $route->setParameters($parameters);
 
             return $route;
         }
@@ -54,7 +49,7 @@ class Router
      */
     public function get(string $pattern, mixed $callable): Route
     {
-        return $this->addRoute(Route::create(
+        return $this->getRoutes()->add(Route::create(
             methods: ['GET', 'HEAD'],
             pattern: $pattern,
             callable: $this->mutateCallable($callable),
@@ -87,24 +82,11 @@ class Router
     /**
      * Get the registered routes.
      *
-     * @return Route[]
+     * @return RouteGroup
      */
-    public function getRoutes(): array
+    public function getRoutes(): RouteGroup
     {
-        return $this->routes ?? [];
-    }
-
-    /**
-     * Add a route to the router's collection.
-     *
-     * @param \Ketyl\Vine\Routing\Route $route
-     * @return \Ketyl\Vine\Routing\Route
-     */
-    private function addRoute(Route $route): Route
-    {
-        $this->routes[] = $route;
-
-        return $route;
+        return $this->routes;
     }
 
     /**
@@ -131,48 +113,38 @@ class Router
      * Determine if a route accepts a request.
      *
      * @param \Ketyl\Vine\Request $request
-     * @param \Ketyl\Vine\Routing\Route $route
-     * @param mixed[] $parameters
+     * @param \Ketyl\Vine\Routing\Route $router
      * @return boolean
      */
-    private function requestMatchesRoute(Request $request, Route $route, array &$parameters = []): bool
+    private function requestMatchesRoute(Request $request, Route $route): bool
     {
         if (!$route->acceptsMethod($request->getMethod())) return false;
 
-        $routeUri = preg_replace(
+        // Replace wildcard with default search regex
+        $search = preg_replace(
             '/(?=.*[^\.])\*(?=.*)/',
-            '.*',
-            str_replace('/', '\/', $route->getPattern())
+            Parameter::DEFAULT_PATTERN,
+            str_replace(['/', '.*'], ['\/', Parameter::DEFAULT_PATTERN], $route->getPattern())
         );
 
-        if (!$routeUri) return false;
+        if (!$search) return false;
 
-        preg_match('/\{([^\/\{\}]+)\}/', $routeUri, $regexPartParams);
-
-        if (!$regexPartParams) {
-            $regexPart = '[^\/\{\}]+';
-        } else {
-            array_shift($regexPartParams);
-            $regexPart = explode(':', $regexPartParams[0])[1] ?? '[^\/\{\}]+';
+        $paramNames = [];
+        foreach ($route->getParameters() as $param) {
+            $paramNames[] = $param->getName();
+            $search = str_replace(sprintf('{%s}', $param->getName()), '(' . $param->getPattern() . ')', $search);
         }
 
-        $match = preg_match(
-            '/^' . preg_replace('/\{[^\/\{\}]+\}/', '(' . $regexPart . ')', $routeUri) . '$/',
+        $routeMatches = preg_match(
+            sprintf('/^%s$/', $search),
             $request->getURI(),
             $matches,
         );
 
-        if (!$match) return false;
+        if (!$routeMatches) return false;
 
         array_shift($matches);
-
-        $parameters = array_combine(
-            array_map(
-                fn ($item) => explode(':', $item)[0],
-                $route->getParameters()
-            ),
-            $matches
-        );
+        $route->setParameterValues(array_combine($paramNames, $matches));
 
         return true;
     }
