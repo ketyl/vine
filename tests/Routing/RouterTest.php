@@ -76,7 +76,7 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('hello', $route->getParameters()['foo']);
+        $this->assertEquals('hello', $route->getParameter('foo')->getValue());
         $this->assertEquals('hello', $route->handle($request)->getBody());
     }
 
@@ -89,8 +89,8 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('hello', $route->getParameters()['foo']);
-        $this->assertEquals('world', $route->getParameters()['baz']);
+        $this->assertEquals('hello', $route->getParameter('foo')->getValue());
+        $this->assertEquals('world', $route->getParameter('baz')->getValue());
         $this->assertEquals('hello world', $route->handle($request)->getBody());
     }
 
@@ -107,6 +107,18 @@ class RouterTest extends TestCase
     }
 
     /** @test */
+    function can_match_route_with_wildcard()
+    {
+        $router = new Router;
+        $router->get('/route/*', fn () => 'Hello, world!');
+        $request = new Request('GET', '/route/123');
+
+        $route = $router->match($request);
+        $this->assertNotNull($route);
+        $this->assertEquals('Hello, world!', $route->handle($request)->getBody());
+    }
+
+    /** @test */
     function can_match_route_parameter_with_regex()
     {
         $router = new Router;
@@ -115,7 +127,7 @@ class RouterTest extends TestCase
 
         $route = $router->match($request);
         $this->assertNotNull($route);
-        $this->assertEquals('123', $route->getParameters()['foo']);
+        $this->assertEquals('123', $route->getParameter('foo')->getValue());
         $this->assertEquals('Hello, world!', $route->handle($request)->getBody());
     }
 

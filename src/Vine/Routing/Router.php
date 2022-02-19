@@ -30,13 +30,9 @@ class Router
     public function match(Request $request): Route
     {
         foreach ($this->getRoutes() as $route) {
-            $parameters = [];
-
-            if (!$this->requestMatchesRoute($request, $route, $parameters)) {
+            if (!$this->requestMatchesRoute($request, $route)) {
                 continue;
             }
-
-            $route->setParameters($parameters);
 
             return $route;
         }
@@ -117,48 +113,40 @@ class Router
      * Determine if a route accepts a request.
      *
      * @param \Ketyl\Vine\Request $request
-     * @param \Ketyl\Vine\Routing\Route $route
-     * @param mixed[] $parameters
+     * @param \Ketyl\Vine\Routing\Route $router
      * @return boolean
      */
-    private function requestMatchesRoute(Request $request, Route $route, array &$parameters = []): bool
+    private function requestMatchesRoute(Request $request, Route $route): bool
     {
         if (!$route->acceptsMethod($request->getMethod())) return false;
 
-        $routeUri = preg_replace(
+        // Replace wildcard with default search regex
+        $search = preg_replace(
             '/(?=.*[^\.])\*(?=.*)/',
-            '.*',
-            str_replace('/', '\/', $route->getPattern())
+            Parameter::DEFAULT_REGEX,
+            str_replace(['/', '.*'], ['\/', Parameter::DEFAULT_REGEX], $route->getPattern())
         );
 
-        if (!$routeUri) return false;
+        if (!$search) return false;
 
-        preg_match('/\{([^\/\{\}]+)\}/', $routeUri, $regexPartParams);
+        preg_match('/\{([^\/\{\}]+)\}/', $search, $regexPartParams);
 
-        if (!$regexPartParams) {
-            $regexPart = '[^\/\{\}]+';
-        } else {
-            array_shift($regexPartParams);
-            $regexPart = explode(':', $regexPartParams[0])[1] ?? '[^\/\{\}]+';
+        $paramNames = [];
+        foreach ($route->getParameters() as $param) {
+            $paramNames[] = $param->getName();
+            $search = str_replace(sprintf('{%s}', $param->getName()), '(' . $param->getRegex() . ')', $search);
         }
 
-        $match = preg_match(
-            '/^' . preg_replace('/\{[^\/\{\}]+\}/', '(' . $regexPart . ')', $routeUri) . '$/',
+        $routeMatches = preg_match(
+            sprintf('/^%s$/', $search),
             $request->getURI(),
             $matches,
         );
 
-        if (!$match) return false;
+        if (!$routeMatches) return false;
 
         array_shift($matches);
-
-        $parameters = array_combine(
-            array_map(
-                fn ($item) => explode(':', $item)[0],
-                $route->getParameters()
-            ),
-            $matches
-        );
+        $route->setParameterValues(array_combine($paramNames, $matches));
 
         return true;
     }

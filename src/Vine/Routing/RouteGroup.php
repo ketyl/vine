@@ -3,12 +3,12 @@
 namespace Ketyl\Vine\Routing;
 
 use ArrayObject;
-use Traversable;
 use ArrayIterator;
+use IteratorAggregate;
 use Ketyl\Vine\Routing\Route;
 use Ketyl\Vine\Traits\HasMiddleware;
 
-class RouteGroup extends ArrayObject
+class RouteGroup extends ArrayObject implements IteratorAggregate
 {
     use HasMiddleware;
 
@@ -45,10 +45,35 @@ class RouteGroup extends ArrayObject
     /**
      * Get iterator for route group.
      *
-     * @return Traversable
+     * @return ArrayIterator<Route>
      */
-    public function getIterator(): Traversable
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->routes);
+    }
+
+    public function offsetGet($name): Route
+    {
+        return $this->routes[$name];
+    }
+
+    public function offsetSet($name, $value): void
+    {
+        $this->routes[$name] = $value;
+    }
+
+    public function offsetExists($name): bool
+    {
+        return isset($this->routes[$name]);
+    }
+
+    public function offsetUnset($name): void
+    {
+        unset($this->routes[$name]);
+    }
+
+    public function count(): int
+    {
+        return count($this->routes);
     }
 }

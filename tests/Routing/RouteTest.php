@@ -4,6 +4,7 @@ namespace Ketyl\Vine\Tests;
 
 use Ketyl\Vine\Routing\Route;
 use Ketyl\Vine\Tests\TestCase;
+use Ketyl\Vine\Routing\Parameter;
 
 class RouteTest extends TestCase
 {
@@ -30,7 +31,9 @@ class RouteTest extends TestCase
     {
         $route = Route::create('GET', '/route/{foo}', fn () => 'Hello, world!');
 
-        $this->assertEquals(['foo'], $route->getParameters());
+        $this->assertCount(1, $route->getParameters());
+        $this->assertEquals('foo', $route->getParameter('foo')->getName());
+        $this->assertEquals(Parameter::DEFAULT_REGEX, $route->getParameter('foo')->getRegex());
     }
 
     /** @test */
@@ -38,7 +41,9 @@ class RouteTest extends TestCase
     {
         $route = Route::create('GET', '/route/{foo}/{bar}', fn () => 'Hello, world!');
 
-        $this->assertEquals(['foo', 'bar'], $route->getParameters());
+        $this->assertCount(2, $route->getParameters());
+        $this->assertEquals('foo', $route->getParameter('foo')->getName());
+        $this->assertEquals('bar', $route->getParameter('bar')->getName());
     }
 
     /** @test */
@@ -46,6 +51,8 @@ class RouteTest extends TestCase
     {
         $route = Route::create('GET', '/route/{foo:\d+}', fn () => 'Hello, world!');
 
-        $this->assertEquals(['foo:\d+'], $route->getParameters());
+        $this->assertCount(1, $route->getParameters());
+        $this->assertEquals('foo', $route->getParameter('foo')->getName());
+        $this->assertEquals('\d+', $route->getParameter('foo')->getRegex());
     }
 }
